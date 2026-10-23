@@ -1,10 +1,20 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
-
+import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module.js';
+import { UsuariosModule } from './usuarios/usuarios.module.js';
+import { PublicacionesModule } from './publicaciones/publicaciones.module.js';
+ 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    // Lee el archivo .env y carga sus variables en process.env
+    ConfigModule.forRoot(),
+    // Conexión a MongoDB (igual que en el ejemplo mongo-test de la cursada)
+    MongooseModule.forRoot(process.env.CONNECTION_STRING!),
+    AuthModule,
+    UsuariosModule,
+    PublicacionesModule,
+  ],
 })
 export class AppModule {}
+ 
