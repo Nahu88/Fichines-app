@@ -1,0 +1,264 @@
+/* ============================================================
+   Fichines — estilos globales
+   Idea: la app se ve como el menú de un juego de rol.
+   Fondo de noche violeta, dorado para todo lo importante,
+   y marcos de HUD con esquinas doradas (clase .hud).
+   ============================================================ */
+
+:root {
+  /* Paleta */
+  --fondo: #1c1a33;        /* fondo de toda la app */
+  --panel: #24224a;        /* tarjetas, formularios */
+  --panel-claro: #2f2c5c;  /* hover, detalles */
+  --borde: #3b3866;        /* bordes finos */
+  --oro: #f0b429;          /* acción principal, esquinas del HUD */
+  --oro-oscuro: #b8860b;
+  --lila: #8f87d9;         /* detalles secundarios */
+  --texto: #e9e6f5;        /* texto principal */
+  --texto-suave: #b9b4d6;  /* texto secundario */
+  --error: #ff8a8a;
+
+  /* Tipografía: Chakra Petch (títulos, botones, etiquetas) + Work Sans (texto) */
+  --fuente-hud: 'Chakra Petch', system-ui, sans-serif;
+  --fuente-texto: 'Work Sans', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--fuente-texto);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--texto);
+  background-color: var(--fondo);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--fuente-hud);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+}
+
+a {
+  color: var(--oro);
+}
+
+/* ---------- Marco de HUD ----------
+   Un recuadro con dos esquinas doradas (arriba-izquierda y abajo-derecha).
+   Las esquinas son los pseudo-elementos ::before y ::after.
+   Se usa en formularios, publicaciones, perfil, panel y modal. */
+
+.hud {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+}
+
+.hud::before,
+.hud::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: var(--oro);
+  border-style: solid;
+}
+
+.hud::before {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+
+.hud::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+/* Etiqueta chica arriba de un título, como en los menús de juego */
+.etiqueta {
+  font-family: var(--fuente-hud);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--oro);
+  letter-spacing: 0.08em;
+  margin: 0 0 4px;
+}
+
+/* ---------- Formularios ---------- */
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.campo label {
+  font-family: var(--fuente-hud);
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--texto-suave);
+}
+
+.campo input,
+.campo textarea {
+  font: inherit;
+  color: var(--texto);
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  border-radius: 0;
+  padding: 10px 12px;
+}
+
+.campo input:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: var(--oro);
+}
+
+/* Campo con error: Angular agrega solas las clases ng-invalid y ng-touched */
+.campo input.ng-invalid.ng-touched,
+.campo textarea.ng-invalid.ng-touched {
+  border-color: var(--error);
+}
+
+.mensaje-error {
+  color: var(--error);
+  font-size: 14px;
+  margin: 0;
+}
+
+.ayuda {
+  color: var(--texto-suave);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ---------- Botones ---------- */
+
+/* Botón principal: dorado y con los costados cortados en diagonal (clip-path) */
+.boton {
+  font-family: var(--fuente-hud);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  padding: 11px 30px;
+  color: var(--fondo);
+  background: var(--oro);
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  transition: background 0.15s;
+}
+
+.boton:hover {
+  background: #ffc847;
+}
+
+.boton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.boton-secundario {
+  font-family: var(--fuente-hud);
+  font-size: 15px;
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--borde);
+  color: var(--texto);
+  padding: 9px 20px;
+}
+
+.boton-secundario:hover {
+  border-color: var(--oro);
+}
+
+:focus-visible {
+  outline: 2px solid var(--oro);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------- Layout de login y registro ----------
+   Izquierda: el emblema y el título. Derecha: el formulario. */
+
+.pantalla-auth {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 56px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.escena {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.escena h1 {
+  font-size: clamp(42px, 6vw, 68px);
+  margin: 20px 0 8px;
+}
+
+.escena p {
+  color: var(--texto-suave);
+  font-size: 18px;
+  max-width: 32ch;
+  margin: 0;
+}
+
+.panel {
+  padding: 36px;
+}
+
+.panel h2 {
+  font-size: 30px;
+}
+
+.panel .pie {
+  margin: 22px 0 0;
+  color: var(--texto-suave);
+  text-align: center;
+}
+
+@media (max-width: 820px) {
+  .pantalla-auth {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px 16px;
+  }
+  .escena {
+    position: static !important;
+    align-items: center;
+    text-align: center;
+  }
+  .escena app-emblema {
+    width: 96px;
+  }
+  .escena h1 {
+    margin-top: 8px;
+  }
+  .panel {
+    padding: 24px;
+  }
+}

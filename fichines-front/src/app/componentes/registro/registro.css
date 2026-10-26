@@ -1,0 +1,55 @@
+/* El formulario de registro es largo: en pantallas grandes el emblema
+   queda quieto a la izquierda mientras scrolleás. */
+.escena {
+  position: sticky;
+  top: 48px;
+  align-self: start;
+}
+
+/* Dos campos uno al lado del otro (nombre/apellido, contraseñas) */
+.fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+}
+
+.foto {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.avatar {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  border: 2px dashed var(--oro);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  color: var(--oro);
+  font-size: 30px;
+  background: var(--fondo);
+}
+
+.foto-texto {
+  font-family: var(--fuente-hud);
+  font-weight: 600;
+  color: var(--oro);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ancho {
+  width: 100%;
+  margin-top: 6px;
+}
+
+@media (max-width: 520px) {
+  .fila {
+    grid-template-columns: 1fr;
+  }
+}

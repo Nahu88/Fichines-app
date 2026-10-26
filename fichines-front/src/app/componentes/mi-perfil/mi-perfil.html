@@ -1,0 +1,47 @@
+<app-navbar />
+
+<main class="perfil">
+  <!-- authGuard ya garantiza que hay sesión; el @if es para que TypeScript sepa que no es null -->
+  @if (usuario) {
+    <section class="cabecera hud">
+      <div class="foto">
+        @if (usuario.imagenUrl) {
+          <img [src]="usuario.imagenUrl" [alt]="'Foto de ' + usuario.nombre" />
+        } @else {
+          <span class="sin-foto">{{ usuario.nombre.charAt(0) }}</span>
+        }
+      </div>
+
+      <div>
+        <p class="etiqueta">{{ usuario.perfil === 'administrador' ? 'Administrador' : 'Jugador' }}</p>
+        <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
+        <p class="arroba">&#64;{{ usuario.usuario }}</p>
+      </div>
+    </section>
+
+    @if (usuario.descripcion) {
+      <blockquote>{{ usuario.descripcion }}</blockquote>
+    }
+
+    <dl class="datos">
+      <div>
+        <dt>Correo</dt>
+        <dd>{{ usuario.correo }}</dd>
+      </div>
+      <div>
+        <dt>Fecha de nacimiento</dt>
+        <!-- 'UTC' para que no reste un día por la zona horaria -->
+        <dd>{{ usuario.fechaNacimiento | date: 'dd/MM/yyyy' : 'UTC' }}</dd>
+      </div>
+      <div>
+        <dt>Jugando desde</dt>
+        <dd>{{ usuario.createdAt | date: 'dd/MM/yyyy' }}</dd>
+      </div>
+    </dl>
+
+    <section class="ultimas">
+      <h2>Tus últimas publicaciones</h2>
+      <p>Cuando publiques en el salón, tus tres últimas publicaciones van a aparecer acá.</p>
+    </section>
+  }
+</main>

@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+}
+
+.emblema {
+  width: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.aro {
+  fill: none;
+  stroke: var(--borde);
+  stroke-width: 2;
+  stroke-dasharray: 10 8;
+  transform-origin: 100px 100px;
+  /* el aro de afuera gira despacio: la única animación de la pantalla */
+  animation: girar 40s linear infinite;
+}
+
+.marca {
+  fill: var(--oro);
+}
+
+.ficha {
+  fill: var(--panel);
+  stroke: var(--oro);
+  stroke-width: 6;
+}
+
+.anillo {
+  fill: none;
+  stroke: var(--oro);
+  stroke-width: 2;
+  stroke-dasharray: 4 6;
+}
+
+.estrella {
+  fill: var(--oro);
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}

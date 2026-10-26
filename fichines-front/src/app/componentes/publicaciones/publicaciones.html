@@ -1,0 +1,35 @@
+<app-navbar />
+
+<main class="salon">
+  <p class="etiqueta">El salón</p>
+  <h1>¿Qué están jugando?</h1>
+  <p class="bajada">Hola {{ auth.usuarioActual()?.nombre }}, esto es lo último que publicaron los jugadores.</p>
+
+  <!-- Caja para publicar: se activa en el sprint 2 -->
+  <div class="nueva hud">
+    <input type="text" placeholder="Contá un logro, una duda o una partida épica" disabled />
+    <button class="boton" type="button" disabled>Publicar</button>
+  </div>
+  <p class="aviso">Muy pronto vas a poder publicar desde acá.</p>
+
+  @for (post of ejemplos; track post.titulo) {
+    <article class="publicacion hud">
+      <header>
+        <span class="inicial">{{ inicial(post.autor) }}</span>
+        <div>
+          <strong>{{ post.autor }}</strong>
+          <span class="meta">&#64;{{ post.usuario }}, {{ post.hace }}</span>
+        </div>
+      </header>
+
+      <h2>{{ post.titulo }}</h2>
+      <p>{{ post.mensaje }}</p>
+
+      <footer>
+        <!-- "Darle una ficha" es nuestro "me gusta" -->
+        <button type="button" class="accion" title="Me gusta">Ficha ({{ post.fichas }})</button>
+        <button type="button" class="accion">Respuestas ({{ post.respuestas }})</button>
+      </footer>
+    </article>
+  }
+</main>

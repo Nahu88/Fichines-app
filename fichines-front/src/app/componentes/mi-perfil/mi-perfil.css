@@ -1,0 +1,86 @@
+.perfil {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 36px 16px 120px;
+}
+
+/* .hud (en styles.css) le da el fondo, el borde y las esquinas doradas */
+.cabecera {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 24px;
+}
+
+.foto {
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+  border: 2px solid var(--oro);
+  padding: 4px;
+}
+
+.foto img,
+.sin-foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  background: var(--fondo);
+  font-family: var(--fuente-hud);
+  font-weight: 600;
+  font-size: 48px;
+  color: var(--oro);
+}
+
+h1 {
+  font-size: clamp(28px, 6vw, 38px);
+  margin-bottom: 2px;
+}
+
+.arroba {
+  color: var(--texto-suave);
+  margin: 0;
+}
+
+blockquote {
+  margin: 24px 0 0;
+  padding: 16px 20px;
+  font-size: 18px;
+  background: var(--panel);
+  border-left: 3px solid var(--lila);
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 28px 0 40px;
+}
+
+.datos dt {
+  font-family: var(--fuente-hud);
+  color: var(--texto-suave);
+  font-size: 14px;
+}
+
+.datos dd {
+  margin: 2px 0 0;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.ultimas {
+  border-top: 1px solid var(--borde);
+  padding-top: 28px;
+}
+
+.ultimas h2 {
+  font-size: 24px;
+}
+
+.ultimas p {
+  color: var(--texto-suave);
+}

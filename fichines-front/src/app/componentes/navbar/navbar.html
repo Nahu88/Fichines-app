@@ -1,0 +1,20 @@
+<header class="navbar">
+  <div class="contenido">
+    <a routerLink="/publicaciones" class="marca">
+      <img src="favicon.svg" alt="" width="32" height="32" />
+      Fichines
+    </a>
+
+    <!-- El navbar solo aparece en pantallas protegidas por authGuard,
+         así que acá siempre hay alguien logueado -->
+    <nav>
+      <a routerLink="/publicaciones" routerLinkActive="activo">Salón</a>
+      <a routerLink="/mi-perfil" routerLinkActive="activo">Mi perfil</a>
+      <!-- El link al mostrador (panel de admin) solo se muestra a administradores (y adminGuard protege la ruta igual) -->
+      @if (auth.usuarioActual()?.perfil === 'administrador') {
+        <a routerLink="/panel" routerLinkActive="activo">Mostrador</a>
+      }
+      <button type="button" class="salir" (click)="salir()">Salir</button>
+    </nav>
+  </div>
+</header>

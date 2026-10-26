@@ -1,0 +1,111 @@
+.salon {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 36px 16px 120px;
+}
+
+h1 {
+  font-size: clamp(32px, 6vw, 44px);
+  margin-bottom: 6px;
+}
+
+.bajada {
+  color: var(--texto-suave);
+  margin: 0 0 28px;
+}
+
+/* ---- caja para publicar ---- */
+.nueva {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+.nueva input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: var(--texto);
+  background: none;
+  border: none;
+  padding: 0 8px;
+}
+
+.aviso {
+  color: var(--texto-suave);
+  font-size: 14px;
+  margin: 8px 0 32px;
+}
+
+/* ---- cada publicación (.hud le da el marco con esquinas doradas) ---- */
+.publicacion {
+  padding: 22px 24px;
+  margin-bottom: 22px;
+}
+
+.publicacion header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.inicial {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  font-family: var(--fuente-hud);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--oro);
+  border: 2px solid var(--oro);
+}
+
+.publicacion header div {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.publicacion strong {
+  font-family: var(--fuente-hud);
+  font-weight: 600;
+}
+
+.meta {
+  color: var(--texto-suave);
+  font-size: 14px;
+}
+
+.publicacion h2 {
+  font-size: 22px;
+}
+
+.publicacion p {
+  margin: 0 0 18px;
+  max-width: 62ch;
+}
+
+.publicacion footer {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--borde);
+  padding-top: 14px;
+}
+
+.accion {
+  font-family: var(--fuente-hud);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--texto-suave);
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.accion:hover {
+  color: var(--oro);
+  border-color: var(--oro);
+}
