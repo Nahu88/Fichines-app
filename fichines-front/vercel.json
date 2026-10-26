@@ -1,4 +1,5 @@
 {
+  "outputDirectory": "dist/fichines-front/browser",
   "rewrites": [
     {
       "source": "/(.*)",
