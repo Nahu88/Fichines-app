@@ -9,7 +9,7 @@ import { PublicacionesModule } from './publicaciones/publicaciones.module.js';
   imports: [
     // Lee el archivo .env y carga sus variables en process.env
     ConfigModule.forRoot(),
-    // Conexión a MongoDB (igual que en el ejemplo mongo-test de la cursada)
+    // Conexión a MongoDB 
     MongooseModule.forRoot(process.env.CONNECTION_STRING!),
     AuthModule,
     UsuariosModule,

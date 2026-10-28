@@ -8,10 +8,6 @@ import { LoginDto } from './dto/login.dto.js';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  // POST /auth/registro  -> responde 201 Created (es el default de @Post)
-  // FileInterceptor('imagen') toma el archivo que viene en el campo "imagen"
-  // del FormData. Lo deja en memoria (archivo.buffer) y el service lo sube a Cloudinary.
   @Post('registro')
   @UseInterceptors(
     FileInterceptor('imagen', {
@@ -26,14 +22,13 @@ export class AuthController {
     }),
   )
   registrar(@Body() datos: RegistroDto, @UploadedFile() imagen?: ArchivoSubido) {
-    // Máximo 2 MB. Lo chequeamos acá para poder responder el error en castellano.
+    // Máximo 2 MB.
     if (imagen && imagen.size > 2 * 1024 * 1024) {
       throw new BadRequestException('La imagen puede pesar hasta 2 MB');
     }
     return this.authService.registrar(datos, imagen);
   }
 
-  // POST /auth/login -> el login no "crea" nada, por eso forzamos 200 OK en vez de 201.
   @Post('login')
   @HttpCode(HttpStatus.OK)
   login(@Body() datos: LoginDto) {

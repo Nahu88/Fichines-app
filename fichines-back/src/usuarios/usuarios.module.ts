@@ -9,7 +9,7 @@ import { Usuario, UsuarioSchema } from './entities/usuario.entity.js';
   imports: [MongooseModule.forFeature([{ name: Usuario.name, schema: UsuarioSchema }])],
   controllers: [UsuariosController],
   providers: [UsuariosService],
-  // Lo exportamos para que AuthModule pueda usar UsuariosService.
+  //exportamos para que AuthModule pueda usar UsuariosService.
   exports: [UsuariosService],
 })
 export class UsuariosModule {}
