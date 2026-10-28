@@ -72,6 +72,10 @@ export class AuthService {
   // upload_stream recibe el archivo en memoria (imagen.buffer); lo envolvemos en una
   // Promise para poder usar await.
   private subirImagen(imagen: ArchivoSubido): Promise<string> {
+    // Cloudinary lee CLOUDINARY_URL apenas se importa, y en tu PC eso pasa ANTES de que
+    // ConfigModule cargue el .env (en Vercel no pasa porque las variables ya existen).
+    // config(true) le pide que vuelva a leer la variable, que a esta altura ya está cargada.
+    cloudinary.config(true);
     return new Promise((resolve, reject) => {
       cloudinary.uploader
         .upload_stream({ folder: 'fichines/perfiles' }, (error, resultado) => {
