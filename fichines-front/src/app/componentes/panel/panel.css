@@ -34,8 +34,14 @@ h1 {
   margin: 0 0 16px;
 }
 
+.icono {
+  font-size: 30px;
+  line-height: 1;
+  color: var(--oro) !important;
+}
+
 .pronto {
-  font-family: var(--fuente-hud);
-  font-size: 14px;
+  font-family: var(--fuente-pixel);
+  font-size: 9px;
   color: var(--lila);
 }

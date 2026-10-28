@@ -2,7 +2,7 @@
   <div class="contenido">
     <a routerLink="/publicaciones" class="marca">
       <img src="favicon.svg" alt="" width="32" height="32" />
-      Fichines
+      FICHINES
     </a>
 
     <!-- El navbar solo aparece en pantallas protegidas por authGuard,
@@ -16,5 +16,20 @@
       }
       <button type="button" class="salir" (click)="salir()">Salir</button>
     </nav>
+
+    <!-- Datos del jugador, como el HUD de arriba de un juego: foto, nick y vidas -->
+    @if (auth.usuarioActual(); as usuario) {
+      <div class="jugador">
+        @if (usuario.imagenUrl) {
+          <img class="mini-foto" [src]="usuario.imagenUrl" alt="" />
+        } @else {
+          <span class="mini-foto">{{ usuario.nombre.charAt(0) }}</span>
+        }
+        <div>
+          <span class="nick">P1 &#64;{{ usuario.usuario }}</span>
+          <span class="vidas" aria-label="3 vidas">&#9829;&#9829;&#9829;</span>
+        </div>
+      </div>
+    }
   </div>
 </header>

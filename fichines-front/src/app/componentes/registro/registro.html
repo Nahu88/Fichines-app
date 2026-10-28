@@ -1,20 +1,31 @@
 <main class="pantalla-auth">
   <section class="escena">
     <app-emblema />
-    <h1>Nuevo jugador</h1>
-    <p>Armá tu perfil. Tu foto y tu descripción son lo primero que van a ver los demás en el salón.</p>
+    <h1 class="titulo-pixel">NUEVO JUGADOR</h1>
+    <p>Armá tu personaje. Tu foto y tu descripción son lo primero que van a ver los demás en el salón.</p>
   </section>
 
   <section class="panel hud">
-    <p class="etiqueta">Registro</p>
+    <p class="etiqueta">NUEVA PARTIDA</p>
     <h2>Crear cuenta</h2>
+
+    <!-- Barra que se llena a medida que completás bien los campos obligatorios -->
+    <div class="progreso">
+      <div class="progreso-texto">
+        <span>Personaje listo</span>
+        <span>{{ progreso() }}%</span>
+      </div>
+      <div class="barra">
+        <div class="relleno" [style.width.%]="progreso()"></div>
+      </div>
+    </div>
 
     <form [formGroup]="formRegistro" (ngSubmit)="registrarse()" novalidate>
       <!-- Foto de perfil: el label hace de botón y el input file queda oculto -->
       <div class="foto">
         <label for="imagen" class="avatar">
-          @if (nombreImagen()) {
-            <span>&#10003;</span>
+          @if (vistaPrevia()) {
+            <img [src]="vistaPrevia()" alt="Tu foto de perfil" />
           } @else {
             <span>+</span>
           }
@@ -59,7 +70,7 @@
       </div>
 
       <div class="campo">
-        <label for="usuario">Nombre de usuario</label>
+        <label for="usuario">Nombre de usuario (tu nick)</label>
         <input id="usuario" formControlName="usuario" autocomplete="username" />
         @if (tieneError('usuario', 'required')) {
           <p class="mensaje-error">Elegí un nombre de usuario.</p>
@@ -114,7 +125,7 @@
       </div>
 
       <button class="boton ancho" type="submit" [disabled]="cargando()">
-        {{ cargando() ? 'Creando cuenta…' : 'Crear cuenta' }}
+        {{ cargando() ? 'CREANDO…' : '▶ CREAR PERSONAJE' }}
       </button>
     </form>
 

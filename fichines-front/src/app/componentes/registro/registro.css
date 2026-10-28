@@ -24,7 +24,7 @@
   width: 76px;
   height: 76px;
   flex-shrink: 0;
-  border: 2px dashed var(--oro);
+  border: 3px dashed var(--oro);
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -32,6 +32,13 @@
   color: var(--oro);
   font-size: 30px;
   background: var(--fondo);
+}
+
+/* La foto elegida llena el cuadro; object-fit: cover la recorta sin deformarla */
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .foto-texto {
@@ -52,4 +59,18 @@
   .fila {
     grid-template-columns: 1fr;
   }
+}
+
+/* Barra de "personaje listo" (la clase .barra está en styles.css) */
+.progreso {
+  margin: 4px 0 24px;
+}
+
+.progreso-texto {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--fuente-pixel);
+  font-size: 10px;
+  color: var(--texto-suave);
+  margin-bottom: 8px;
 }

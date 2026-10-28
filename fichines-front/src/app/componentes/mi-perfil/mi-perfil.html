@@ -12,10 +12,36 @@
         }
       </div>
 
-      <div>
-        <p class="etiqueta">{{ usuario.perfil === 'administrador' ? 'Administrador' : 'Jugador' }}</p>
+      <div class="identidad">
+        <p class="etiqueta">CLASE: {{ usuario.perfil === 'administrador' ? 'ADMINISTRADOR' : 'JUGADOR' }}</p>
         <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
         <p class="arroba">&#64;{{ usuario.usuario }}</p>
+
+        <!-- Nivel y experiencia: en el sprint 1 todos arrancan en nivel 1.
+             Cuando haya publicaciones (sprint 2) se puede calcular la XP con ellas. -->
+        <div class="nivel">
+          <span>NV. 1</span>
+          <div class="barra">
+            <div class="relleno" style="width: 10%"></div>
+          </div>
+          <span>10 / 100 XP</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Estadísticas del personaje: se llenan con datos reales en el sprint 2 -->
+    <section class="stats">
+      <div class="stat hud">
+        <span class="numero">0</span>
+        <span>Publicaciones</span>
+      </div>
+      <div class="stat hud">
+        <span class="numero">0</span>
+        <span>Fichas recibidas</span>
+      </div>
+      <div class="stat hud">
+        <span class="numero">0</span>
+        <span>Comentarios</span>
       </div>
     </section>
 
@@ -40,6 +66,7 @@
     </dl>
 
     <section class="ultimas">
+      <p class="etiqueta">HISTORIAL</p>
       <h2>Tus últimas publicaciones</h2>
       <p>Cuando publiques en el salón, tus tres últimas publicaciones van a aparecer acá.</p>
     </section>

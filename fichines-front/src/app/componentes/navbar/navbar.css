@@ -1,16 +1,16 @@
-/* Barra de arriba, como la barra de estado de un juego */
+/* Barra de arriba, como la barra de estado (HUD) de un juego */
 .navbar {
-  border-bottom: 1px solid var(--borde);
+  border-bottom: 3px solid var(--oro);
   background: var(--panel);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
 }
 
 .contenido {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 16px 24px;
   flex-wrap: wrap;
-  max-width: 980px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: 12px 16px;
 }
@@ -19,11 +19,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--fuente-hud);
-  font-weight: 600;
-  font-size: 22px;
-  color: var(--texto);
+  font-family: var(--fuente-pixel);
+  font-size: 14px;
+  color: var(--oro);
   text-decoration: none;
+  text-shadow: 2px 2px 0 var(--oro-oscuro);
 }
 
 nav {
@@ -31,6 +31,7 @@ nav {
   align-items: center;
   gap: 4px;
   flex-wrap: wrap;
+  margin-right: auto;
 }
 
 nav a,
@@ -42,7 +43,7 @@ nav a,
   text-decoration: none;
   padding: 8px 14px;
   background: none;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   cursor: pointer;
 }
 
@@ -51,8 +52,53 @@ nav a:hover,
   color: var(--texto);
 }
 
-/* El link de la página actual queda marcado en dorado */
+/* El link de la página actual queda marcado en dorado y con la flechita
+   de "opción elegida", como en el menú de un juego */
 nav a.activo {
   color: var(--oro);
   border-color: var(--oro);
+}
+
+nav a.activo::before {
+  content: '\25B6  ';
+  font-size: 11px;
+}
+
+/* ---- datos del jugador ---- */
+.jugador {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mini-foto {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--oro);
+  background: var(--fondo);
+  font-family: var(--fuente-pixel);
+  font-size: 13px;
+  color: var(--oro);
+}
+
+.jugador div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nick {
+  font-family: var(--fuente-pixel);
+  font-size: 9px;
+  color: var(--texto);
+}
+
+.vidas {
+  color: var(--error);
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 2px;
 }

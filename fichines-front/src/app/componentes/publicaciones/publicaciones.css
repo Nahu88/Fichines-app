@@ -55,9 +55,8 @@ h1 {
   height: 40px;
   display: grid;
   place-items: center;
-  font-family: var(--fuente-hud);
-  font-weight: 600;
-  font-size: 18px;
+  font-family: var(--fuente-pixel);
+  font-size: 14px;
   color: var(--oro);
   border: 2px solid var(--oro);
 }
@@ -100,7 +99,7 @@ h1 {
   font-weight: 500;
   color: var(--texto-suave);
   background: var(--fondo);
-  border: 1px solid var(--borde);
+  border: 2px solid var(--borde);
   padding: 6px 14px;
   cursor: pointer;
 }
@@ -108,4 +107,61 @@ h1 {
 .accion:hover {
   color: var(--oro);
   border-color: var(--oro);
+}
+
+/* ---- cartel de arriba de cada publicación (logro / party / duda) ---- */
+.cartel {
+  display: inline-block;
+  font-family: var(--fuente-pixel);
+  font-size: 9px;
+  line-height: 1.5;
+  padding: 6px 10px;
+  margin: 0 0 16px !important;
+  color: var(--fondo);
+  background: var(--oro);
+}
+
+.party .cartel {
+  background: var(--lila);
+}
+
+.duda .cartel {
+  background: var(--verde);
+}
+
+/* ---- juego y plataforma ---- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.chip {
+  font-family: var(--fuente-hud);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 2px 10px;
+  border: 2px solid var(--borde);
+  color: var(--texto);
+}
+
+.chip.plataforma {
+  font-family: var(--fuente-pixel);
+  font-size: 9px;
+  line-height: 2;
+  color: var(--lila);
+  border-color: var(--lila);
+}
+
+/* ---- la ficha (moneda) del botón de me gusta: un círculo dorado con borde ---- */
+.moneda {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--oro);
+  border: 2px solid var(--oro-oscuro);
+  vertical-align: -1px;
+  margin-right: 4px;
 }

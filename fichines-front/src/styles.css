@@ -1,8 +1,9 @@
 /* ============================================================
    Fichines — estilos globales
-   Idea: la app se ve como el menú de un juego de rol.
-   Fondo de noche violeta, dorado para todo lo importante,
-   y marcos de HUD con esquinas doradas (clase .hud).
+   Idea: la app se ve como un juego retro de arcade / RPG.
+   - De fondo, una pared de tapas de juegos difuminada y líneas de TV vieja (CRT).
+   - Letra pixelada (Press Start 2P) para títulos, etiquetas y botones.
+   - Dorado para lo importante y marcos de HUD con esquinas doradas (.hud).
    ============================================================ */
 
 :root {
@@ -12,13 +13,19 @@
   --panel-claro: #2f2c5c;  /* hover, detalles */
   --borde: #3b3866;        /* bordes finos */
   --oro: #f0b429;          /* acción principal, esquinas del HUD */
+  --oro-claro: #ffd77a;
   --oro-oscuro: #b8860b;
   --lila: #8f87d9;         /* detalles secundarios */
+  --verde: #5ee08a;        /* barras de vida / experiencia */
   --texto: #e9e6f5;        /* texto principal */
   --texto-suave: #b9b4d6;  /* texto secundario */
   --error: #ff8a8a;
 
-  /* Tipografía: Chakra Petch (títulos, botones, etiquetas) + Work Sans (texto) */
+  /* Tipografía:
+     Press Start 2P -> letra pixelada de arcade (títulos cortos, etiquetas, botones)
+     Chakra Petch   -> subtítulos y labels
+     Work Sans      -> texto largo (se lee mejor) */
+  --fuente-pixel: 'Press Start 2P', monospace; /* ojo: no tiene mayúsculas con tilde (Á, Ó) */
   --fuente-hud: 'Chakra Petch', system-ui, sans-serif;
   --fuente-texto: 'Work Sans', system-ui, sans-serif;
 }
@@ -37,6 +44,58 @@ body {
   background-color: var(--fondo);
 }
 
+/* ---------- Fondo del salón de arcade (difuminado, como el login de Steam) ----------
+   fondo-arcade.svg (en la carpeta public) es un salón de fichines de noche
+   en pixel art, con máquinas, cartel de neón y alfombra. Lo ponemos detrás de todo con:
+   - position: fixed -> queda quieto aunque scrollees
+   - z-index: -1     -> va detrás del contenido
+   - filter: blur    -> lo difumina para que no distraiga
+   Encima de la imagen va un degradado del color de fondo que la oscurece:
+   así el texto se sigue leyendo bien. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -20px; /* un poco más grande que la pantalla, para que el blur no deje bordes claros */
+  z-index: -1;
+  background:
+    linear-gradient(rgba(28, 26, 51, 0.8), rgba(28, 26, 51, 0.92)),
+    url('/fondo-arcade.svg') center / cover no-repeat #140f2b;
+  filter: blur(4px);
+}
+
+/* En login y registro el fondo se ve más (menos oscurecido), como en Steam.
+   :has(.pantalla-auth) significa "si el body tiene adentro algo con la clase pantalla-auth". */
+body:has(.pantalla-auth)::before {
+  background:
+    radial-gradient(circle at center, rgba(28, 26, 51, 0.55), rgba(28, 26, 51, 0.9)),
+    url('/fondo-arcade.svg') center / cover no-repeat #140f2b;
+  filter: blur(3px);
+}
+
+/* En pantallas más anchas que la imagen (1600x1000 = 8/5), "cover" la agranda
+   por el ancho y corta el cartel de arriba. Ahí la ajustamos por la altura
+   (auto 100%) para que se vea entera; los costados quedan del color de fondo
+   de la imagen (#140f2b). El primer valor (100% 100%) es para el degradado. */
+@media (min-aspect-ratio: 8/5) {
+  body::before,
+  body:has(.pantalla-auth)::before {
+    background-size: 100% 100%, auto 100%;
+  }
+}
+
+/* Líneas de TV vieja (efecto CRT) por encima de todo.
+   pointer-events: none hace que no moleste para hacer clic. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 3px);
+  /* Bordes oscuros como una pantalla de TV vieja (viñeta) */
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.7);
+}
+
 h1,
 h2,
 h3 {
@@ -44,6 +103,15 @@ h3 {
   font-weight: 600;
   line-height: 1.15;
   margin: 0 0 0.5em;
+}
+
+/* Título pixelado con sombra dura, como el logo de un juego */
+.titulo-pixel {
+  font-family: var(--fuente-pixel);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--oro);
+  text-shadow: 4px 4px 0 var(--oro-oscuro), 8px 8px 0 rgba(0, 0, 0, 0.35);
 }
 
 a {
@@ -59,6 +127,7 @@ a {
   position: relative;
   background: var(--panel);
   border: 1px solid var(--borde);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.35);
 }
 
 .hud::before,
@@ -74,23 +143,55 @@ a {
 .hud::before {
   top: -1px;
   left: -1px;
-  border-width: 2px 0 0 2px;
+  border-width: 3px 0 0 3px;
 }
 
 .hud::after {
   bottom: -1px;
   right: -1px;
-  border-width: 0 2px 2px 0;
+  border-width: 0 3px 3px 0;
 }
 
 /* Etiqueta chica arriba de un título, como en los menús de juego */
 .etiqueta {
-  font-family: var(--fuente-hud);
-  font-size: 13px;
-  font-weight: 500;
+  font-family: var(--fuente-pixel);
+  font-size: 10px;
   color: var(--oro);
-  letter-spacing: 0.08em;
-  margin: 0 0 4px;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+/* Texto que titila, como el "PRESS START" de los arcades.
+   steps(1) hace que cambie de golpe (sin fundido), como en las pantallas viejas. */
+.parpadeo {
+  animation: parpadear 1.1s steps(1) infinite;
+}
+
+@keyframes parpadear {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- Barra de vida / experiencia ----------
+   El contenedor es el marco; .relleno es la parte llena y su ancho
+   se pone desde el HTML con [style.width.%]. Las rayitas negras
+   (repeating-linear-gradient) la dividen en "bloques" como en los juegos. */
+
+.barra {
+  height: 16px;
+  border: 2px solid var(--texto);
+  background: var(--fondo);
+  padding: 2px;
+}
+
+.barra .relleno {
+  height: 100%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 10px, var(--fondo) 10px 12px),
+    var(--verde);
+  transition: width 0.3s steps(6);
 }
 
 /* ---------- Formularios ---------- */
@@ -114,7 +215,7 @@ a {
   font: inherit;
   color: var(--texto);
   background: var(--fondo);
-  border: 1px solid var(--borde);
+  border: 2px solid var(--borde);
   border-radius: 0;
   padding: 10px 12px;
 }
@@ -123,6 +224,7 @@ a {
 .campo textarea:focus {
   outline: none;
   border-color: var(--oro);
+  box-shadow: 4px 4px 0 var(--oro-oscuro);
 }
 
 /* Campo con error: Angular agrega solas las clases ng-invalid y ng-touched */
@@ -137,6 +239,11 @@ a {
   margin: 0;
 }
 
+/* Un corazón roto antes de cada error, como cuando perdés una vida */
+.mensaje-error::before {
+  content: '\2665  ';
+}
+
 .ayuda {
   color: var(--texto-suave);
   font-size: 14px;
@@ -145,27 +252,41 @@ a {
 
 /* ---------- Botones ---------- */
 
-/* Botón principal: dorado y con los costados cortados en diagonal (clip-path) */
+/* Botón principal: un bloque dorado "con relieve", como los botones de arcade.
+   Las sombras internas (inset) hacen el brillo arriba y la sombra abajo,
+   y al apretarlo (:active) baja 3px como si fuera un botón físico. */
 .boton {
-  font-family: var(--fuente-hud);
-  font-size: 16px;
-  font-weight: 600;
+  font-family: var(--fuente-pixel);
+  font-size: 12px;
+  line-height: 1.4;
   cursor: pointer;
   border: none;
-  padding: 11px 30px;
+  padding: 14px 24px;
   color: var(--fondo);
   background: var(--oro);
-  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-  transition: background 0.15s;
+  box-shadow:
+    inset -4px -4px 0 var(--oro-oscuro),
+    inset 4px 4px 0 var(--oro-claro),
+    0 4px 0 #000;
+  transition: transform 0.05s;
 }
 
 .boton:hover {
   background: #ffc847;
 }
 
+.boton:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset -4px -4px 0 var(--oro-oscuro),
+    inset 4px 4px 0 var(--oro-claro),
+    0 1px 0 #000;
+}
+
 .boton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
 .boton-secundario {
@@ -173,7 +294,7 @@ a {
   font-size: 15px;
   cursor: pointer;
   background: none;
-  border: 1px solid var(--borde);
+  border: 2px solid var(--borde);
   color: var(--texto);
   padding: 9px 20px;
 }
@@ -216,8 +337,8 @@ a {
 }
 
 .escena h1 {
-  font-size: clamp(42px, 6vw, 68px);
-  margin: 20px 0 8px;
+  font-size: clamp(26px, 4.4vw, 46px);
+  margin: 28px 0 18px;
 }
 
 .escena p {
@@ -225,6 +346,15 @@ a {
   font-size: 18px;
   max-width: 32ch;
   margin: 0;
+}
+
+/* "INSERTÁ UNA FICHA": el cartelito que titila abajo del título */
+.escena .insert-coin {
+  font-family: var(--fuente-pixel);
+  font-size: 12px;
+  color: var(--texto);
+  max-width: none;
+  margin-top: 26px;
 }
 
 .panel {
@@ -256,9 +386,43 @@ a {
     width: 96px;
   }
   .escena h1 {
-    margin-top: 8px;
+    margin-top: 12px;
   }
   .panel {
     padding: 24px;
+  }
+}
+
+/* ---------- Personajes del login ----------
+   Parados sobre la alfombra del fondo, abajo a la izquierda.
+   position: fixed + bottom los deja pegados al borde de abajo de la pantalla. */
+.personajes {
+  position: fixed;
+  left: 22%;
+  bottom: 12px;
+  width: 200px;
+  image-rendering: pixelated; /* que no se vean borrosos al agrandarlos */
+  filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.4)); /* sombra en el piso */
+}
+
+/* Crédito de los personajes, chiquito abajo a la derecha */
+.credito {
+  position: fixed;
+  right: 16px;
+  bottom: 10px;
+  margin: 0;
+  font-size: 12px;
+  color: var(--texto-suave);
+  opacity: 0.7;
+}
+
+/* En el celular no hay lugar: escondemos los personajes para que no tapen el formulario */
+@media (max-width: 820px) {
+  .personajes {
+    display: none;
+  }
+  .credito {
+    position: static;
+    text-align: center;
   }
 }

@@ -1,13 +1,15 @@
 <main class="pantalla-auth">
   <section class="escena">
     <app-emblema />
-    <h1>Fichines</h1>
+    <h1 class="titulo-pixel">FICHINES</h1>
     <p>El salón de fichines, pero online. Contá tus logros, pedí ayuda con ese nivel imposible y encontrá con quién jugar.</p>
+    <!-- Cartel que titila, como el "INSERT COIN" de las máquinas -->
+    <p class="insert-coin parpadeo">INSERTE FICHA</p>
   </section>
 
   <section class="panel hud">
-    <p class="etiqueta">Ingreso</p>
-    <h2>Volvé a la partida</h2>
+    <p class="etiqueta">JUGADOR 1</p>
+    <h2>Continuar partida</h2>
 
     <form [formGroup]="formLogin" (ngSubmit)="ingresar()" novalidate>
       <div class="campo">
@@ -30,10 +32,13 @@
       </div>
 
       <button class="boton ancho" type="submit" [disabled]="cargando()">
-        {{ cargando() ? 'Cargando partida…' : 'Entrar' }}
+        {{ cargando() ? 'CARGANDO…' : '▶ START' }}
       </button>
     </form>
 
-    <p class="pie">¿Primera vez? <a routerLink="/registro">Creá tu cuenta</a></p>
+    <p class="pie">¿Primera vez? <a routerLink="/registro">Creá tu personaje</a></p>
   </section>
+
+  <!-- Personajes parados en el salón (la imagen va en la carpeta public) -->
+  <img class="personajes" src="personajes.png" alt="Mario y Luigi" />
 </main>

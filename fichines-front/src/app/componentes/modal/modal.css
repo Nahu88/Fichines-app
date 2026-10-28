@@ -11,8 +11,9 @@
 /* La caja usa el marco .hud de styles.css (esquinas doradas) */
 .caja {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   padding: 30px;
+  border-width: 3px;
   text-align: center;
   animation: aparecer 0.15s ease-out;
 }
@@ -20,6 +21,27 @@
 .caja h2 {
   font-size: 24px;
   color: var(--oro);
+}
+
+/* Cartelito pixelado de arriba: "NIVEL SUPERADO" o "GAME OVER" */
+.icono {
+  font-family: var(--fuente-pixel);
+  font-size: 10px;
+  color: var(--verde) !important;
+  margin: 0 0 14px !important;
+}
+
+.caja.error .icono {
+  color: var(--error) !important;
+}
+
+/* Flechita de "seguir" en la esquina de abajo */
+.siguiente {
+  position: absolute;
+  right: 18px;
+  bottom: 12px;
+  color: var(--oro);
+  font-size: 14px;
 }
 
 /* En los errores, las esquinas y el título pasan a rojo */

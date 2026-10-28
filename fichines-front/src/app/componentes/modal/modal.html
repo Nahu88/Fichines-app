@@ -1,12 +1,16 @@
 @if (modal.abierto()) {
   <!-- Fondo oscuro: si hacés clic afuera de la caja, se cierra -->
   <div class="fondo" (click)="modal.cerrar()">
-    <!-- stopPropagation evita que el clic dentro de la caja llegue al fondo -->
+    <!-- Caja de diálogo como la de un RPG.
+         stopPropagation evita que el clic dentro de la caja llegue al fondo -->
     <div class="caja hud" [class.error]="modal.tipo() === 'error'" role="dialog" aria-modal="true"
          [attr.aria-label]="modal.titulo()" (click)="$event.stopPropagation()">
+      <p class="icono">{{ modal.tipo() === 'error' ? 'GAME OVER' : 'NIVEL SUPERADO' }}</p>
       <h2>{{ modal.titulo() }}</h2>
       <p>{{ modal.mensaje() }}</p>
-      <button class="boton" type="button" (click)="modal.cerrar()">Entendido</button>
+      <button class="boton" type="button" (click)="modal.cerrar()">OK</button>
+      <!-- La flechita que titila, como cuando un personaje termina de hablar -->
+      <span class="siguiente parpadeo" aria-hidden="true">&#9660;</span>
     </div>
   </div>
 }

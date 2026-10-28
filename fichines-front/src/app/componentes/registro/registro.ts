@@ -26,6 +26,8 @@ export class Registro {
   // La imagen no va dentro del FormGroup: los input file se manejan aparte.
   imagen: File | null = null;
   nombreImagen = signal('');
+  // Dirección temporal de la foto elegida, para mostrarla en el cuadro antes de subirla.
+  vistaPrevia = signal('');
 
   // La contraseña va en una variable aparte (como controlClave en el repo de la cursada)
   // para poder pasársela al validador de "repetir contraseña".
@@ -52,6 +54,14 @@ export class Registro {
     return control!.touched && control!.hasError(error);
   }
 
+  // Barra de "personaje listo": qué porcentaje de los campos obligatorios ya está bien completado.
+  // filter se queda con los campos válidos y length los cuenta.
+  progreso() {
+    const campos = ['nombre', 'apellido', 'correo', 'usuario', 'password', 'repetirPassword', 'fechaNacimiento'];
+    const completos = campos.filter((campo) => this.formRegistro.get(campo)!.valid).length;
+    return Math.round((completos / campos.length) * 100);
+  }
+
   elegirImagen(evento: Event) {
     const input = evento.target as HTMLInputElement;
     const archivo = input.files?.[0];
@@ -70,6 +80,9 @@ export class Registro {
 
     this.imagen = archivo;
     this.nombreImagen.set(archivo.name); // para mostrar qué archivo eligió
+    // createObjectURL crea una dirección que apunta al archivo que está en la PC,
+    // así el <img> puede mostrarlo sin tener que subirlo primero.
+    this.vistaPrevia.set(URL.createObjectURL(archivo));
   }
 
   registrarse() {
