@@ -1,0 +1,48 @@
+<!-- [class] agrega la clase del tipo (logro, party, duda) para cambiar el color del cartel -->
+<article class="publicacion hud" [class]="publicacion().tipo">
+  <p class="cartel">{{ carteles[publicacion().tipo] }}</p>
+
+  <header>
+    @if (publicacion().autor.imagenUrl) {
+      <img class="inicial" [src]="publicacion().autor.imagenUrl" alt="" />
+    } @else {
+      <span class="inicial">{{ publicacion().autor.nombre.charAt(0).toUpperCase() }}</span>
+    }
+    <div>
+      <strong>{{ publicacion().autor.nombre }} {{ publicacion().autor.apellido }}</strong>
+      <span class="meta">&#64;{{ publicacion().autor.usuario }}, {{ publicacion().createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+    </div>
+  </header>
+
+  <h2>{{ publicacion().titulo }}</h2>
+  <p class="mensaje">{{ publicacion().mensaje }}</p>
+
+  @if (publicacion().imagenUrl) {
+    <img class="imagen" [src]="publicacion().imagenUrl" [alt]="publicacion().titulo" />
+  }
+
+  <!-- Juego y consola: solo si los completaron -->
+  @if (publicacion().juego || publicacion().plataforma) {
+    <div class="chips">
+      @if (publicacion().juego) {
+        <span class="chip">{{ publicacion().juego }}</span>
+      }
+      @if (publicacion().plataforma) {
+        <span class="chip plataforma">{{ publicacion().plataforma }}</span>
+      }
+    </div>
+  }
+
+  <footer>
+    <!-- "Darle una ficha" es nuestro "me gusta". [class.activa] lo pinta si ya la diste. -->
+    <button type="button" class="accion" [class.activa]="leDiMeGusta()" (click)="tocarMeGusta()"
+            [title]="leDiMeGusta() ? 'Quitar me gusta' : 'Me gusta'">
+      <span class="moneda"></span>
+      {{ publicacion().cantidadMeGusta }} {{ publicacion().cantidadMeGusta === 1 ? 'ficha' : 'fichas' }}
+    </button>
+
+    @if (puedoEliminar()) {
+      <button type="button" class="accion eliminar" (click)="tocarEliminar()">Eliminar</button>
+    }
+  </footer>
+</article>

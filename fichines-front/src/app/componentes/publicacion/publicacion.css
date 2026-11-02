@@ -1,0 +1,162 @@
+/* .hud (en styles.css) le da el marco con esquinas doradas */
+.publicacion {
+  padding: 22px 24px;
+  margin-bottom: 22px;
+}
+
+/* ---- cartel de arriba (logro / party / duda) ---- */
+.cartel {
+  display: inline-block;
+  font-family: var(--fuente-pixel);
+  font-size: 9px;
+  line-height: 1.5;
+  padding: 6px 10px;
+  margin: 0 0 16px;
+  color: var(--fondo);
+  background: var(--oro);
+}
+
+.party .cartel {
+  background: var(--lila);
+}
+
+.duda .cartel {
+  background: var(--verde);
+}
+
+/* ---- autor ---- */
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.inicial {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  font-family: var(--fuente-pixel);
+  font-size: 14px;
+  color: var(--oro);
+  border: 2px solid var(--oro);
+}
+
+header div {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+strong {
+  font-family: var(--fuente-hud);
+  font-weight: 600;
+}
+
+.meta {
+  color: var(--texto-suave);
+  font-size: 14px;
+}
+
+/* ---- contenido ---- */
+h2 {
+  font-size: 22px;
+}
+
+.mensaje {
+  margin: 0 0 18px;
+  max-width: 62ch;
+  white-space: pre-line; /* respeta los saltos de línea que escribió el usuario */
+  overflow-wrap: anywhere;
+}
+
+.imagen {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border: 2px solid var(--borde);
+  margin-bottom: 18px;
+}
+
+/* ---- juego y plataforma ---- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.chip {
+  font-family: var(--fuente-hud);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 2px 10px;
+  border: 2px solid var(--borde);
+}
+
+.chip.plataforma {
+  font-family: var(--fuente-pixel);
+  font-size: 9px;
+  line-height: 2;
+  color: var(--lila);
+  border-color: var(--lila);
+}
+
+/* ---- botones de abajo ---- */
+footer {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--borde);
+  padding-top: 14px;
+}
+
+.accion {
+  font-family: var(--fuente-hud);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--texto-suave);
+  background: var(--fondo);
+  border: 2px solid var(--borde);
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.accion:hover {
+  color: var(--oro);
+  border-color: var(--oro);
+}
+
+/* Ficha ya dada: queda dorada */
+.accion.activa {
+  color: var(--fondo);
+  background: var(--oro);
+  border-color: var(--oro);
+}
+
+.accion.activa .moneda {
+  background: var(--oro-claro);
+}
+
+.accion.eliminar {
+  margin-left: auto; /* lo empuja a la derecha */
+}
+
+.accion.eliminar:hover {
+  color: var(--error);
+  border-color: var(--error);
+}
+
+/* La ficha (moneda) del botón: un círculo dorado con borde */
+.moneda {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--oro);
+  border: 2px solid var(--oro-oscuro);
+  vertical-align: -1px;
+  margin-right: 4px;
+}

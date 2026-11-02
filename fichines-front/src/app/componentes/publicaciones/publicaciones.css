@@ -14,154 +14,107 @@ h1 {
   margin: 0 0 28px;
 }
 
-/* ---- caja para publicar ---- */
+/* ---- formulario para publicar (.hud le da el marco) ---- */
 .nueva {
-  display: flex;
-  gap: 10px;
-  padding: 10px;
+  padding: 22px 24px 24px;
+  margin-bottom: 28px;
 }
 
-.nueva input {
-  flex: 1;
-  min-width: 0;
+.campo select {
   font: inherit;
   color: var(--texto);
-  background: none;
-  border: none;
-  padding: 0 8px;
-}
-
-.aviso {
-  color: var(--texto-suave);
-  font-size: 14px;
-  margin: 8px 0 32px;
-}
-
-/* ---- cada publicación (.hud le da el marco con esquinas doradas) ---- */
-.publicacion {
-  padding: 22px 24px;
-  margin-bottom: 22px;
-}
-
-.publicacion header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.inicial {
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  font-family: var(--fuente-pixel);
-  font-size: 14px;
-  color: var(--oro);
-  border: 2px solid var(--oro);
-}
-
-.publicacion header div {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.3;
-}
-
-.publicacion strong {
-  font-family: var(--fuente-hud);
-  font-weight: 600;
-}
-
-.meta {
-  color: var(--texto-suave);
-  font-size: 14px;
-}
-
-.publicacion h2 {
-  font-size: 22px;
-}
-
-.publicacion p {
-  margin: 0 0 18px;
-  max-width: 62ch;
-}
-
-.publicacion footer {
-  display: flex;
-  gap: 8px;
-  border-top: 1px solid var(--borde);
-  padding-top: 14px;
-}
-
-.accion {
-  font-family: var(--fuente-hud);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--texto-suave);
   background: var(--fondo);
   border: 2px solid var(--borde);
-  padding: 6px 14px;
-  cursor: pointer;
+  border-radius: 0;
+  padding: 10px 12px;
 }
 
-.accion:hover {
-  color: var(--oro);
+.campo select:focus {
+  outline: none;
   border-color: var(--oro);
 }
 
-/* ---- cartel de arriba de cada publicación (logro / party / duda) ---- */
-.cartel {
-  display: inline-block;
-  font-family: var(--fuente-pixel);
-  font-size: 9px;
-  line-height: 1.5;
-  padding: 6px 10px;
-  margin: 0 0 16px !important;
-  color: var(--fondo);
-  background: var(--oro);
+/* Tipo, juego y plataforma uno al lado del otro */
+.fila {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1fr;
+  gap: 0 12px;
 }
 
-.party .cartel {
-  background: var(--lila);
-}
-
-.duda .cartel {
-  background: var(--verde);
-}
-
-/* ---- juego y plataforma ---- */
-.chips {
+.pie-form {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
 }
 
-.chip {
+.elegir-imagen {
   font-family: var(--fuente-hud);
-  font-size: 13px;
   font-weight: 500;
-  padding: 2px 10px;
-  border: 2px solid var(--borde);
+  color: var(--oro);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+/* ---- orden ---- */
+.barra-orden {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-family: var(--fuente-hud);
+  color: var(--texto-suave);
+}
+
+.barra-orden select {
+  font: inherit;
   color: var(--texto);
+  background: var(--panel);
+  border: 2px solid var(--borde);
+  padding: 6px 10px;
 }
 
-.chip.plataforma {
+/* ---- estados (cargando / vacío) ---- */
+.estado {
   font-family: var(--fuente-pixel);
-  font-size: 9px;
-  line-height: 2;
-  color: var(--lila);
-  border-color: var(--lila);
+  font-size: 12px;
+  text-align: center;
+  color: var(--oro);
+  padding: 40px 0;
 }
 
-/* ---- la ficha (moneda) del botón de me gusta: un círculo dorado con borde ---- */
-.moneda {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--oro);
-  border: 2px solid var(--oro-oscuro);
-  vertical-align: -1px;
-  margin-right: 4px;
+.vacio {
+  padding: 28px;
+  text-align: center;
+  color: var(--texto-suave);
+}
+
+/* ---- paginado ---- */
+.paginado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.paginado span {
+  font-family: var(--fuente-pixel);
+  font-size: 10px;
+  color: var(--oro);
+}
+
+.paginado button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .fila {
+    grid-template-columns: 1fr;
+  }
 }

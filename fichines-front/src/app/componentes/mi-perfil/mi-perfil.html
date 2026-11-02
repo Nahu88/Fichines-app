@@ -17,31 +17,31 @@
         <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
         <p class="arroba">&#64;{{ usuario.usuario }}</p>
 
-        <!-- Nivel y experiencia: en el sprint 1 todos arrancan en nivel 1.
-             Cuando haya publicaciones (sprint 2) se puede calcular la XP con ellas. -->
+        <!-- Nivel y experiencia, calculados con la cantidad de publicaciones (ver mi-perfil.ts) -->
         <div class="nivel">
-          <span>NV. 1</span>
+          <span>NV. {{ nivel() }}</span>
           <div class="barra">
-            <div class="relleno" style="width: 10%"></div>
+            <!-- [style.width.%] pone el ancho en porcentaje: 40 -> width: 40% -->
+            <div class="relleno" [style.width.%]="xp()"></div>
           </div>
-          <span>10 / 100 XP</span>
+          <span>{{ xp() }} / 100 XP</span>
         </div>
       </div>
     </section>
 
-    <!-- Estadísticas del personaje: se llenan con datos reales en el sprint 2 -->
+    <!-- Estadísticas del personaje -->
     <section class="stats">
       <div class="stat hud">
-        <span class="numero">0</span>
+        <span class="numero">{{ totalPublicaciones() }}</span>
         <span>Publicaciones</span>
       </div>
       <div class="stat hud">
-        <span class="numero">0</span>
-        <span>Fichas recibidas</span>
+        <span class="numero">{{ fichasRecientes() }}</span>
+        <span>Fichas en tus últimas 3</span>
       </div>
       <div class="stat hud">
-        <span class="numero">0</span>
-        <span>Comentarios</span>
+        <span class="numero">{{ nivel() }}</span>
+        <span>Nivel</span>
       </div>
     </section>
 
@@ -68,7 +68,26 @@
     <section class="ultimas">
       <p class="etiqueta">HISTORIAL</p>
       <h2>Tus últimas publicaciones</h2>
-      <p>Cuando publiques en el salón, tus tres últimas publicaciones van a aparecer acá.</p>
+
+      @if (cargando()) {
+        <p class="parpadeo">Cargando…</p>
+      } @else {
+        @for (publicacion of ultimas(); track publicacion._id) {
+          <app-publicacion
+            [publicacion]="publicacion"
+            (meGustaTocado)="alTocarMeGusta($event)"
+            (eliminarTocado)="alTocarEliminar($event)" />
+
+          <!-- Comentarios de esta publicación.
+               Se pueden escribir desde el sprint 3; hasta entonces la lista está vacía. -->
+          <div class="comentarios">
+            <p class="etiqueta">COMENTARIOS</p>
+            <p>Todavía no hay comentarios en esta publicación.</p>
+          </div>
+        } @empty {
+          <p>Todavía no publicaste nada. Cuando publiques en el salón, tus tres últimas publicaciones van a aparecer acá.</p>
+        }
+      }
     </section>
   }
 </main>

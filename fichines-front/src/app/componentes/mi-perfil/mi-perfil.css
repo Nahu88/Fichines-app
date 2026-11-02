@@ -81,8 +81,26 @@ blockquote {
   font-size: 24px;
 }
 
-.ultimas p {
+.ultimas > p {
   color: var(--texto-suave);
+}
+
+/* Caja de comentarios debajo de cada publicación, "colgando" de ella */
+.comentarios {
+  margin: -10px 0 32px 24px;
+  padding: 14px 18px;
+  border-left: 3px solid var(--lila);
+  background: rgba(36, 34, 74, 0.7);
+  color: var(--texto-suave);
+  font-size: 14px;
+}
+
+.comentarios p {
+  margin: 0;
+}
+
+.comentarios .etiqueta {
+  margin-bottom: 6px;
 }
 
 .identidad {

@@ -5,10 +5,22 @@
          stopPropagation evita que el clic dentro de la caja llegue al fondo -->
     <div class="caja hud" [class.error]="modal.tipo() === 'error'" role="dialog" aria-modal="true"
          [attr.aria-label]="modal.titulo()" (click)="$event.stopPropagation()">
-      <p class="icono">{{ modal.tipo() === 'error' ? 'GAME OVER' : 'NIVEL SUPERADO' }}</p>
-      <h2>{{ modal.titulo() }}</h2>
-      <p>{{ modal.mensaje() }}</p>
-      <button class="boton" type="button" (click)="modal.cerrar()">OK</button>
+      @if (modal.alConfirmar()) {
+        <!-- Modal de confirmación: pregunta antes de hacer algo -->
+        <p class="icono">¿CONTINUAR?</p>
+        <h2>{{ modal.titulo() }}</h2>
+        <p>{{ modal.mensaje() }}</p>
+        <div class="botones">
+          <button class="boton-secundario" type="button" (click)="modal.cerrar()">Cancelar</button>
+          <button class="boton" type="button" (click)="modal.aceptar()">SI, SEGURO</button>
+        </div>
+      } @else {
+        <!-- Modal común: solo informa -->
+        <p class="icono">{{ modal.tipo() === 'error' ? 'GAME OVER' : 'NIVEL SUPERADO' }}</p>
+        <h2>{{ modal.titulo() }}</h2>
+        <p>{{ modal.mensaje() }}</p>
+        <button class="boton" type="button" (click)="modal.cerrar()">OK</button>
+      }
       <!-- La flechita que titila, como cuando un personaje termina de hablar -->
       <span class="siguiente parpadeo" aria-hidden="true">&#9660;</span>
     </div>

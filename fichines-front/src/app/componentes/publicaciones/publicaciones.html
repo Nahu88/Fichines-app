@@ -5,42 +5,106 @@
   <h1>¿Qué están jugando?</h1>
   <p class="bajada">Hola {{ auth.usuarioActual()?.nombre }}, esto es lo último que publicaron los jugadores.</p>
 
-  <!-- Caja para publicar: se activa en el sprint 2 -->
-  <div class="nueva hud">
-    <input type="text" placeholder="Contá un logro, una duda o una partida épica" disabled />
-    <button class="boton" type="button" disabled>PUBLICAR</button>
-  </div>
-  <p class="aviso">Muy pronto vas a poder publicar desde acá.</p>
+  <!-- ---------- Formulario para publicar ---------- -->
+  <form class="nueva hud" [formGroup]="formPublicacion" (ngSubmit)="publicar()" novalidate>
+    <p class="etiqueta">NUEVA PUBLICACION</p>
 
-  @for (post of ejemplos; track post.titulo) {
-    <!-- [class] agrega la clase del tipo (logro, party, duda) para cambiar el color del cartel -->
-    <article class="publicacion hud" [class]="post.tipo">
-      <p class="cartel">{{ carteles[post.tipo] }}</p>
+    <div class="campo">
+      <label for="titulo">Título</label>
+      <input id="titulo" formControlName="titulo" placeholder="Ej: Pasé el jefe final sin recibir daño" />
+      @if (tieneError('titulo', 'required')) {
+        <p class="mensaje-error">Escribí un título.</p>
+      } @else if (tieneError('titulo', 'maxlength')) {
+        <p class="mensaje-error">El título puede tener hasta 80 caracteres.</p>
+      }
+    </div>
 
-      <header>
-        <span class="inicial">{{ inicial(post.autor) }}</span>
-        <div>
-          <strong>{{ post.autor }}</strong>
-          <span class="meta">&#64;{{ post.usuario }}, {{ post.hace }}</span>
-        </div>
-      </header>
+    <div class="campo">
+      <label for="mensaje">Mensaje</label>
+      <textarea id="mensaje" rows="3" formControlName="mensaje" placeholder="Contá un logro, una duda o una partida épica"></textarea>
+      @if (tieneError('mensaje', 'required')) {
+        <p class="mensaje-error">Escribí un mensaje.</p>
+      } @else if (tieneError('mensaje', 'maxlength')) {
+        <p class="mensaje-error">El mensaje puede tener hasta 1000 caracteres.</p>
+      }
+    </div>
 
-      <h2>{{ post.titulo }}</h2>
-      <p>{{ post.mensaje }}</p>
-
-      <!-- En qué juego y en qué consola -->
-      <div class="chips">
-        <span class="chip">{{ post.juego }}</span>
-        <span class="chip plataforma">{{ post.plataforma }}</span>
+    <div class="fila">
+      <div class="campo">
+        <label for="tipo">Tipo</label>
+        <select id="tipo" formControlName="tipo">
+          <option value="logro">Logro</option>
+          <option value="party">Busco party</option>
+          <option value="duda">Pido ayuda</option>
+        </select>
       </div>
+      <div class="campo">
+        <label for="juego">Juego (opcional)</label>
+        <input id="juego" formControlName="juego" placeholder="Ej: Hollow Knight" />
+        @if (tieneError('juego', 'maxlength')) {
+          <p class="mensaje-error">Hasta 60 caracteres.</p>
+        }
+      </div>
+      <div class="campo">
+        <label for="plataforma">Plataforma (opcional)</label>
+        <select id="plataforma" formControlName="plataforma">
+          <option value="">Ninguna</option>
+          @for (p of plataformas; track p) {
+            <option [value]="p">{{ p }}</option>
+          }
+        </select>
+      </div>
+    </div>
 
-      <footer>
-        <!-- "Darle una ficha" es nuestro "me gusta": el circulito dorado es la ficha -->
-        <button type="button" class="accion" title="Me gusta">
-          <span class="moneda"></span> {{ post.fichas }} fichas
-        </button>
-        <button type="button" class="accion">{{ post.respuestas }} respuestas</button>
-      </footer>
-    </article>
+    <div class="pie-form">
+      <!-- El label hace de botón y el input file queda oculto, como en el registro -->
+      <label for="imagen" class="elegir-imagen">
+        {{ nombreImagen() ? 'Imagen: ' + nombreImagen() : '+ Agregar imagen (opcional)' }}
+      </label>
+      <input id="imagen" type="file" accept="image/*" (change)="elegirImagen($event)" hidden />
+
+      <button class="boton" type="submit" [disabled]="publicando()">
+        {{ publicando() ? 'PUBLICANDO…' : '▶ PUBLICAR' }}
+      </button>
+    </div>
+  </form>
+
+  <!-- ---------- Orden ---------- -->
+  <div class="barra-orden">
+    <label for="orden">Ordenar por</label>
+    <!-- [value] muestra el orden actual; (change) avisa cuando lo cambian -->
+    <select id="orden" [value]="orden()" (change)="cambiarOrden($event)">
+      <option value="fecha">Más nuevas</option>
+      <option value="meGusta">Más fichas</option>
+    </select>
+  </div>
+
+  <!-- ---------- Listado ---------- -->
+  @if (cargando()) {
+    <p class="estado parpadeo">CARGANDO…</p>
+  } @else {
+    @for (publicacion of lista(); track publicacion._id) {
+      <!-- input: [publicacion] / outputs: (meGustaTocado) y (eliminarTocado).
+           $event es la publicación que mandó el componente con emit(). -->
+      <app-publicacion
+        [publicacion]="publicacion"
+        (meGustaTocado)="alTocarMeGusta($event)"
+        (eliminarTocado)="alTocarEliminar($event)" />
+    } @empty {
+      <!-- @empty se muestra cuando la lista está vacía -->
+      <div class="vacio hud">
+        <p class="etiqueta">SALON VACIO</p>
+        <p>Todavía no hay publicaciones. ¡Sé el primero en contar algo!</p>
+      </div>
+    }
+
+    <!-- ---------- Paginado ---------- -->
+    @if (total() > porPagina) {
+      <nav class="paginado" aria-label="Páginas">
+        <button class="boton-secundario" type="button" (click)="anterior()" [disabled]="pagina() === 1">◀ Anterior</button>
+        <span>PAGINA {{ pagina() }} / {{ totalPaginas() }}</span>
+        <button class="boton-secundario" type="button" (click)="siguiente()" [disabled]="pagina() === totalPaginas()">Siguiente ▶</button>
+      </nav>
+    }
   }
 </main>

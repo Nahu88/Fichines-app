@@ -63,3 +63,12 @@
   from { transform: scale(0.95); opacity: 0; }
   to   { transform: scale(1); opacity: 1; }
 }
+
+/* Los dos botones del modal de confirmación, uno al lado del otro */
+.botones {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
