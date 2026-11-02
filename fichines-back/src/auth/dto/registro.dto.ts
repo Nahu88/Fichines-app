@@ -1,14 +1,16 @@
 import { IsDateString, IsEmail, IsNotEmpty, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
-// Los decoradores de class-validator los validan solo por  el
+// Un DTO (Data Transfer Object) describe QUÉ datos esperamos recibir.
+// Los decoradores de class-validator los validan solos gracias al
 // ValidationPipe global de main.ts. Si algo falla, Nest responde 400 Bad Request.
 export class RegistroDto {
-  @IsNotEmpty({ message: 'El nombre es obligatorio' })
+  // (class-validator revisa de abajo hacia arriba: "es obligatorio" va al final)
   @IsString({ message: 'El nombre tiene que ser texto' })
+  @IsNotEmpty({ message: 'El nombre es obligatorio' })
   nombre: string;
 
-  @IsNotEmpty({ message: 'El apellido es obligatorio' })
   @IsString({ message: 'El apellido tiene que ser texto' })
+  @IsNotEmpty({ message: 'El apellido es obligatorio' })
   apellido: string;
 
   @IsEmail({}, { message: 'El correo no es válido' })
