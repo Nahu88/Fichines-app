@@ -55,7 +55,7 @@ export class Publicaciones implements OnInit {
 
   cargar() {
     this.cargando.set(true);
-    // offset: cuántas saltear. Página 1 -> 0, página 2 -> 5, página 3 -> 10.
+    // offset:Página 1 -> 0, página 2 -> 5, página 3 -> 10.
     const offset = (this.pagina() - 1) * this.porPagina;
 
     this.servicio.listar(this.orden(), offset, this.porPagina).subscribe({
@@ -123,7 +123,7 @@ export class Publicaciones implements OnInit {
       return;
     }
 
-    // FormData porque puede ir una imagen, igual que en el registro.
+    // FormData 
     const valores = this.formPublicacion.value;
     const datos = new FormData();
     datos.append('titulo', valores.titulo!);

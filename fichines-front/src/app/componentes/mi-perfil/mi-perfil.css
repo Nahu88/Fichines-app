@@ -103,6 +103,41 @@ blockquote {
   margin-bottom: 6px;
 }
 
+/* Cada comentario, separado del siguiente por una línea fina */
+.comentario {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--borde);
+}
+
+.comentario:last-of-type {
+  border-bottom: none;
+}
+
+.quien strong {
+  font-family: var(--fuente-hud);
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.editado {
+  font-style: italic;
+  color: var(--lila);
+}
+
+.comentario .texto {
+  margin-top: 2px;
+  color: var(--texto);
+  white-space: pre-line; /* respeta los saltos de línea */
+  overflow-wrap: anywhere;
+}
+
+.ver-todos {
+  display: inline-block;
+  margin-top: 8px;
+  font-family: var(--fuente-hud);
+  font-weight: 500;
+}
+
 .identidad {
   flex: 1;
   min-width: 220px;

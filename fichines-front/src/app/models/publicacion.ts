@@ -17,6 +17,7 @@ export interface Publicacion {
   };
   meGusta: string[]; // _id de los usuarios que le dieron me gusta
   cantidadMeGusta: number;
+  cantidadComentarios: number;
   createdAt: string;
 }
 

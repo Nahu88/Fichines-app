@@ -1,0 +1,88 @@
+<app-navbar />
+
+<main class="detalle">
+  <a class="volver" routerLink="/publicaciones">◀ Volver al salón</a>
+
+  @if (publicacion(); as publicacion) {
+    <!-- La misma tarjeta del Salón, sin el link a sí misma -->
+    <app-publicacion
+      [publicacion]="publicacion"
+      [conEnlace]="false"
+      (meGustaTocado)="alTocarMeGusta($event)"
+      (eliminarTocado)="alTocarEliminar($event)" />
+  } @else {
+    <p class="estado parpadeo">CARGANDO…</p>
+  }
+
+  <section class="comentarios">
+    <p class="etiqueta">COMENTARIOS ({{ totalComentarios() }})</p>
+
+    <!-- ---------- Escribir un comentario ---------- -->
+    <form class="nuevo hud" [formGroup]="formComentario" (ngSubmit)="comentar()" novalidate>
+      <div class="campo">
+        <label for="mensaje">Tu comentario</label>
+        <textarea id="mensaje" rows="2" formControlName="mensaje" placeholder="Respondé, ayudá o festejá"></textarea>
+        @if (formComentario.controls.mensaje.touched && formComentario.controls.mensaje.hasError('required')) {
+          <p class="mensaje-error">Escribí algo antes de comentar.</p>
+        }
+        @if (formComentario.controls.mensaje.hasError('maxlength')) {
+          <p class="mensaje-error">El comentario puede tener hasta 500 caracteres.</p>
+        }
+      </div>
+      <button class="boton" type="submit" [disabled]="enviando()">
+        {{ enviando() ? 'ENVIANDO…' : '▶ COMENTAR' }}
+      </button>
+    </form>
+
+    <!-- ---------- Lista: uno debajo del otro, los más recientes primero ---------- -->
+    @for (comentario of comentarios(); track comentario._id) {
+      <article class="comentario">
+        <header>
+          @if (comentario.autor.imagenUrl) {
+            <img class="mini" [src]="comentario.autor.imagenUrl" alt="" />
+          } @else {
+            <span class="mini">{{ comentario.autor.nombre.charAt(0).toUpperCase() }}</span>
+          }
+          <strong>{{ comentario.autor.nombre }} {{ comentario.autor.apellido }}</strong>
+          <span class="meta">
+            &#64;{{ comentario.autor.usuario }}, {{ comentario.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+            <!-- El TP pide anunciar que un comentario fue editado -->
+            @if (comentario.modificado) {
+              <span class="editado">(editado)</span>
+            }
+          </span>
+        </header>
+
+        @if (editandoId() === comentario._id) {
+          <!-- Modo edición: textarea con el texto actual y botones guardar / cancelar -->
+          <div class="campo">
+            <textarea rows="2" [formControl]="textoEdicion" aria-label="Editar comentario"></textarea>
+            @if (textoEdicion.touched && textoEdicion.hasError('required')) {
+              <p class="mensaje-error">El comentario no puede quedar vacío.</p>
+            }
+          </div>
+          <div class="acciones">
+            <button class="boton-secundario" type="button" (click)="cancelarEdicion()">Cancelar</button>
+            <button class="boton" type="button" (click)="guardarEdicion(comentario)">GUARDAR</button>
+          </div>
+        } @else {
+          <p class="texto">{{ comentario.mensaje }}</p>
+          @if (esMio(comentario)) {
+            <button class="editar" type="button" (click)="empezarEdicion(comentario)">Editar</button>
+          }
+        }
+      </article>
+    } @empty {
+      @if (!cargandoComentarios()) {
+        <p class="vacio">Todavía no hay comentarios. ¡Escribí el primero!</p>
+      }
+    }
+
+    <!-- "Cargar más": solo si quedan comentarios por traer -->
+    @if (hayMas()) {
+      <button class="boton-secundario cargar-mas" type="button" (click)="cargarMas()" [disabled]="cargandoComentarios()">
+        {{ cargandoComentarios() ? 'Cargando…' : 'Cargar más comentarios ▼' }}
+      </button>
+    }
+  </section>
+</main>

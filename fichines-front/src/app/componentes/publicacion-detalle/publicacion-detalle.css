@@ -1,0 +1,125 @@
+.detalle {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 16px 120px;
+}
+
+.volver {
+  display: inline-block;
+  font-family: var(--fuente-hud);
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 18px;
+}
+
+/* La publicación se ve más grande que en el Salón */
+app-publicacion {
+  display: block;
+  font-size: 18px;
+}
+
+.estado {
+  font-family: var(--fuente-pixel);
+  font-size: 12px;
+  text-align: center;
+  color: var(--oro);
+  padding: 40px 0;
+}
+
+/* ---- comentarios ---- */
+.comentarios {
+  margin-top: 8px;
+}
+
+.nuevo {
+  padding: 18px 20px;
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.nuevo .campo {
+  width: 100%;
+}
+
+/* Cada comentario: una caja con borde lila a la izquierda, uno debajo del otro */
+.comentario {
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  background: rgba(36, 34, 74, 0.85);
+  border-left: 3px solid var(--lila);
+}
+
+.comentario header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.mini {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--oro);
+  font-family: var(--fuente-pixel);
+  font-size: 11px;
+  color: var(--oro);
+}
+
+strong {
+  font-family: var(--fuente-hud);
+  font-weight: 600;
+}
+
+.meta {
+  color: var(--texto-suave);
+  font-size: 13px;
+}
+
+.editado {
+  font-style: italic;
+  color: var(--lila);
+}
+
+.texto {
+  margin: 0;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.editar {
+  margin-top: 8px;
+  font-family: var(--fuente-hud);
+  font-size: 13px;
+  color: var(--texto-suave);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.editar:hover {
+  color: var(--oro);
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.vacio {
+  color: var(--texto-suave);
+  text-align: center;
+}
+
+.cargar-mas {
+  display: block;
+  margin: 18px auto 0;
+}

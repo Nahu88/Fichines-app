@@ -41,6 +41,13 @@
       {{ publicacion().cantidadMeGusta }} {{ publicacion().cantidadMeGusta === 1 ? 'ficha' : 'fichas' }}
     </button>
 
+    <!-- SPRINT 3: link a la página de la publicación, con sus comentarios -->
+    @if (conEnlace()) {
+      <a class="accion" [routerLink]="['/publicaciones', publicacion()._id]">
+        {{ publicacion().cantidadComentarios }} {{ publicacion().cantidadComentarios === 1 ? 'comentario' : 'comentarios' }}
+      </a>
+    }
+
     @if (puedoEliminar()) {
       <button type="button" class="accion eliminar" (click)="tocarEliminar()">Eliminar</button>
     }

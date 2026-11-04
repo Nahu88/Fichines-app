@@ -1,5 +1,6 @@
 import { Component, inject, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Publicacion } from '../../models/publicacion';
 import { Auth } from '../../servicios/auth';
 
@@ -8,7 +9,7 @@ import { Auth } from '../../servicios/auth';
 // - output: avisa a esa pantalla cuando el usuario toca "ficha" o "eliminar".
 // Este componente no habla con el back: solo muestra y avisa. La pantalla padre hace el pedido.
 @Component({
-  imports: [DatePipe],
+  imports: [DatePipe, RouterLink],
   selector: 'app-publicacion',
   templateUrl: './publicacion.html',
   styleUrl: './publicacion.css',
@@ -18,6 +19,10 @@ export class PublicacionComponent {
 
   // input.required: la pantalla padre tiene que pasarla sí o sí.
   publicacion = input.required<Publicacion>();
+
+  // SPRINT 3: ¿mostrar el link a la página de la publicación?
+  // Por defecto sí; en la propia página de la publicación se pasa [conEnlace]="false".
+  conEnlace = input(true);
 
   // Eventos hacia el padre. Mandan la publicación para que sepa cuál fue.
   meGustaTocado = output<Publicacion>();
