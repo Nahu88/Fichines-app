@@ -4,15 +4,21 @@ import { Auth } from '../servicios/auth';
 
 // Igual que en el ejemplo "guards" de la cursada.
 // Deja pasar solo si hay alguien logueado; si no, lo manda al login.
-// SPRINT 1: mira el usuario guardado en el navegador (mock).
-// SPRINT 3: acá se va a validar el token contra el back.
+// SPRINT 3:
+// - Si no hay token -> al login.
+// - Si hay token pero todavía no lo validamos con el back en esta visita
+//   (por ejemplo, recargaste la página) -> a la pantalla "Cargando", que lo valida.
 export const authGuard: CanActivateFn = () => {
   const auth = inject(Auth);
   const router = inject(Router);
 
-  if (auth.usuarioActual()) {
-    return true;
+  if (!auth.token()) {
+    router.navigate(['/login']);
+    return false;
   }
-  router.navigate(['/login']);
-  return false;
+  if (!auth.sesionValidada()) {
+    router.navigate(['/cargando']);
+    return false;
+  }
+  return true;
 };

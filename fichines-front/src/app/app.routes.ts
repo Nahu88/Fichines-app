@@ -7,10 +7,15 @@ import { adminGuard } from './guards/admin-guard';
 // (carga diferida: el código de la pantalla se descarga recién cuando entrás).
 // Los guards deciden quién puede entrar a cada pantalla:
 //   invitadoGuard -> solo sin sesión (login, registro)
-//   authGuard     -> solo con sesión (salón, mi perfil)
+//   authGuard     -> solo con sesión (salón, publicación, mi perfil)
 //   adminGuard    -> solo administradores (panel)
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // SPRINT 3: la app arranca en la pantalla "Cargando", que valida el token con el back.
+  { path: '', redirectTo: 'cargando', pathMatch: 'full' },
+  {
+    path: 'cargando',
+    loadComponent: () => import('./componentes/cargando/cargando').then((m) => m.Cargando),
+  },
   {
     path: 'login',
     loadComponent: () => import('./componentes/login/login').then((m) => m.Login),
@@ -27,6 +32,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    // SPRINT 3: una publicación en grande con sus comentarios. ":id" es el _id de la publicación.
+    path: 'publicaciones/:id',
+    loadComponent: () =>
+      import('./componentes/publicacion-detalle/publicacion-detalle').then((m) => m.PublicacionDetalle),
+    canActivate: [authGuard],
+  },
+  {
     path: 'mi-perfil',
     loadComponent: () => import('./componentes/mi-perfil/mi-perfil').then((m) => m.MiPerfil),
     canActivate: [authGuard],
@@ -37,6 +49,6 @@ export const routes: Routes = [
     // Primero chequea que haya sesión, después que sea administrador
     canActivate: [authGuard, adminGuard],
   },
-  // Cualquier otra dirección vuelve al login
-  { path: '**', redirectTo: 'login' },
+  // Cualquier otra dirección vuelve al inicio (Cargando decide a dónde ir)
+  { path: '**', redirectTo: 'cargando' },
 ];

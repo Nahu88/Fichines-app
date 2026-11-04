@@ -36,10 +36,12 @@ export class Login {
     const { identificador, password } = this.formLogin.value;
 
     this.auth.login(identificador!, password!).subscribe({
-      next: (usuario) => {
+      // SPRINT 3: el back devuelve { usuario, token }. iniciarSesion guarda los dos
+      // en el localStorage y arranca el contador del aviso de los 5 minutos.
+      next: (respuesta) => {
         this.cargando.set(false);
-        this.auth.guardarSesion(usuario);
-        this.modal.mostrar('Partida cargada', `Hola ${usuario.nombre}, el salón te estaba esperando.`);
+        this.auth.iniciarSesion(respuesta);
+        this.modal.mostrar('Partida cargada', `Hola ${respuesta.usuario.nombre}, el salón te estaba esperando.`);
         this.router.navigate(['/publicaciones']);
       },
       error: (error) => {

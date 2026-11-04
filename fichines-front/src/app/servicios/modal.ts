@@ -13,6 +13,7 @@ export class Modal {
   // Si hay una función guardada acá, el modal muestra "Cancelar" y "Sí, seguro"
   // y al confirmar la ejecuta. Si es null, es un modal común con "OK".
   alConfirmar = signal<(() => void) | null>(null);
+  textoConfirmar = signal('SI, SEGURO'); // texto del botón de aceptar
 
   mostrar(titulo: string, mensaje: string, tipo: 'exito' | 'error' = 'exito') {
     this.titulo.set(titulo);
@@ -23,10 +24,12 @@ export class Modal {
   }
 
   // Pregunta antes de hacer algo (por ejemplo, eliminar una publicación).
-  // accion es una función: se ejecuta solo si el usuario aprieta "Sí, seguro".
-  confirmar(titulo: string, mensaje: string, accion: () => void) {
+  // accion es una función: se ejecuta solo si el usuario aprieta el botón de aceptar.
+  // textoBoton es opcional: si no se pasa, dice "SI, SEGURO".
+  confirmar(titulo: string, mensaje: string, accion: () => void, textoBoton = 'SI, SEGURO') {
     this.titulo.set(titulo);
     this.mensaje.set(mensaje);
+    this.textoConfirmar.set(textoBoton);
     this.tipo.set('error');
     this.alConfirmar.set(accion);
     this.abierto.set(true);

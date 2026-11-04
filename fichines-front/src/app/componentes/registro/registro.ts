@@ -108,10 +108,11 @@ export class Registro {
 
     this.cargando.set(true);
     this.auth.registro(datos).subscribe({
-      next: (usuario) => {
+      // SPRINT 3: igual que el login, llega { usuario, token }.
+      next: (respuesta) => {
         this.cargando.set(false);
-        this.auth.guardarSesion(usuario);
-        this.modal.mostrar('Cuenta creada', `Bienvenido/a, ${usuario.nombre}. Ya tenés tu lugar en el salón.`);
+        this.auth.iniciarSesion(respuesta);
+        this.modal.mostrar('Cuenta creada', `Bienvenido/a, ${respuesta.usuario.nombre}. Ya tenés tu lugar en el salón.`);
         this.router.navigate(['/publicaciones']);
       },
       error: (error) => {

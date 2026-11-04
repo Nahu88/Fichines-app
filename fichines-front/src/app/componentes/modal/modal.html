@@ -12,7 +12,7 @@
         <p>{{ modal.mensaje() }}</p>
         <div class="botones">
           <button class="boton-secundario" type="button" (click)="modal.cerrar()">Cancelar</button>
-          <button class="boton" type="button" (click)="modal.aceptar()">SI, SEGURO</button>
+          <button class="boton" type="button" (click)="modal.aceptar()">{{ modal.textoConfirmar() }}</button>
         </div>
       } @else {
         <!-- Modal común: solo informa -->

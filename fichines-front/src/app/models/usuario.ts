@@ -12,3 +12,9 @@ export interface Usuario {
   activo: boolean;
   createdAt: string;
 }
+
+// SPRINT 3: login y registro devuelven el usuario y su token JWT.
+export interface RespuestaAuth {
+  usuario: Usuario;
+  token: string;
+}

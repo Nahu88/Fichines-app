@@ -2,14 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { PaginaPublicaciones, Publicacion } from '../models/publicacion';
-import { Auth } from './auth';
 
 // Servicio que habla con el módulo de publicaciones del back.
 // Se llama PublicacionesService (y no Publicaciones) para no confundirse con la pantalla Publicaciones.
+// SPRINT 3: ya no agregamos a mano quién somos: el interceptor le pone el token a cada pedido.
 @Service()
 export class PublicacionesService {
   http = inject(HttpClient);
-  auth = inject(Auth);
 
   url = `${environment.apiUrl}/publicaciones`;
 
@@ -23,26 +22,25 @@ export class PublicacionesService {
     return this.http.get<PaginaPublicaciones>(this.url, { params });
   }
 
+  // GET /publicaciones/:id (una sola, para la página de la publicación)
+  buscarUna(id: string) {
+    return this.http.get<Publicacion>(`${this.url}/${id}`);
+  }
+
   // POST /publicaciones con FormData (texto + imagen opcional), igual que el registro.
   crear(datos: FormData) {
-    return this.http.post<Publicacion>(this.url, datos, { headers: this.cabeceras() });
+    return this.http.post<Publicacion>(this.url, datos);
   }
 
   eliminar(id: string) {
-    return this.http.delete<{ mensaje: string }>(`${this.url}/${id}`, { headers: this.cabeceras() });
+    return this.http.delete<{ mensaje: string }>(`${this.url}/${id}`);
   }
 
   darMeGusta(id: string) {
-    return this.http.post<Publicacion>(`${this.url}/${id}/me-gusta`, {}, { headers: this.cabeceras() });
+    return this.http.post<Publicacion>(`${this.url}/${id}/me-gusta`, {});
   }
 
   quitarMeGusta(id: string) {
-    return this.http.delete<Publicacion>(`${this.url}/${id}/me-gusta`, { headers: this.cabeceras() });
-  }
-
-  // SPRINT 2: le decimos al back quién somos mandando nuestro _id en una cabecera.
-  // SPRINT 3: acá se va a mandar el token JWT en su lugar.
-  private cabeceras() {
-    return { 'x-usuario-id': this.auth.usuarioActual()?._id ?? '' };
+    return this.http.delete<Publicacion>(`${this.url}/${id}/me-gusta`);
   }
 }
