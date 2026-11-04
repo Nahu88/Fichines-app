@@ -4,11 +4,12 @@ import {
   Controller,
   Delete,
   Get,
-  Headers,
   Param,
   Post,
   Query,
+  Req,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -16,10 +17,13 @@ import { PublicacionesService } from './publicaciones.service.js';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto.js';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto.js';
 import type { ArchivoSubido } from '../imagenes/imagenes.service.js';
+import { AuthGuard } from '../guards/auth.guard.js';
 
-// SPRINT 2: quién hace el pedido llega en la cabecera "x-usuario-id" (el _id del usuario).
-// @Headers('x-usuario-id') la lee. En el sprint 3 se reemplaza por el token JWT.
+// SPRINT 3: @UseGuards arriba de la clase protege TODAS las rutas del controller.
+// Sin un token válido, el AuthGuard responde 401 antes de llegar a cualquier método.
+// Quién hace el pedido sale del token: request.usuario.sub es su _id.
 @Controller('publicaciones')
+@UseGuards(AuthGuard)
 export class PublicacionesController {
   constructor(private readonly publicacionesService: PublicacionesService) {}
 
@@ -37,15 +41,11 @@ export class PublicacionesController {
       },
     }),
   )
-  crear(
-    @Headers('x-usuario-id') usuarioId: string,
-    @Body() datos: CrearPublicacionDto,
-    @UploadedFile() imagen?: ArchivoSubido,
-  ) {
+  crear(@Req() request: any, @Body() datos: CrearPublicacionDto, @UploadedFile() imagen?: ArchivoSubido) {
     if (imagen && imagen.size > 2 * 1024 * 1024) {
       throw new BadRequestException('La imagen puede pesar hasta 2 MB');
     }
-    return this.publicacionesService.crear(usuarioId, datos, imagen);
+    return this.publicacionesService.crear(request.usuario.sub, datos, imagen);
   }
 
   // GET /publicaciones?orden=fecha&offset=0&limit=5&usuario=<id> -> 200 OK
@@ -55,21 +55,27 @@ export class PublicacionesController {
     return this.publicacionesService.listar(filtros);
   }
 
+  // GET /publicaciones/:id -> 200 OK (una sola, para la página de la publicación)
+  @Get(':id')
+  buscarUna(@Param('id') id: string) {
+    return this.publicacionesService.buscarUna(id);
+  }
+
   // DELETE /publicaciones/:id -> 200 OK (baja lógica)
   @Delete(':id')
-  eliminar(@Param('id') id: string, @Headers('x-usuario-id') usuarioId: string) {
-    return this.publicacionesService.eliminar(id, usuarioId);
+  eliminar(@Param('id') id: string, @Req() request: any) {
+    return this.publicacionesService.eliminar(id, request.usuario.sub);
   }
 
   // POST /publicaciones/:id/me-gusta -> 201 Created (se crea un me gusta)
   @Post(':id/me-gusta')
-  darMeGusta(@Param('id') id: string, @Headers('x-usuario-id') usuarioId: string) {
-    return this.publicacionesService.darMeGusta(id, usuarioId);
+  darMeGusta(@Param('id') id: string, @Req() request: any) {
+    return this.publicacionesService.darMeGusta(id, request.usuario.sub);
   }
 
   // DELETE /publicaciones/:id/me-gusta -> 200 OK
   @Delete(':id/me-gusta')
-  quitarMeGusta(@Param('id') id: string, @Headers('x-usuario-id') usuarioId: string) {
-    return this.publicacionesService.quitarMeGusta(id, usuarioId);
+  quitarMeGusta(@Param('id') id: string, @Req() request: any) {
+    return this.publicacionesService.quitarMeGusta(id, request.usuario.sub);
   }
 }

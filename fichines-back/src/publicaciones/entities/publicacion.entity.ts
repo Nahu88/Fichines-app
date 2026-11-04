@@ -39,6 +39,11 @@ export class Publicacion {
   @Prop({ default: 0 })
   cantidadMeGusta: number;
 
+  // Cuántos comentarios tiene (se suma 1 cada vez que alguien comenta).
+  // Lo guardamos para mostrar "N comentarios" sin tener que contarlos cada vez.
+  @Prop({ default: 0 })
+  cantidadComentarios: number;
+
   // Baja lógica: al "borrar" no se elimina de la base, se pone en false.
   @Prop({ default: true })
   activo: boolean;

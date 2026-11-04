@@ -67,6 +67,12 @@ export class PublicacionesService {
     return { publicaciones, total };
   }
 
+  // ---------- Una sola (para la página de la publicación) ----------
+  async buscarUna(id: string) {
+    const publicacion = await this.buscarActiva(id);
+    return publicacion.populate('autor', DATOS_AUTOR);
+  }
+
   // ---------- Baja lógica ----------
   async eliminar(id: string, usuarioId: string) {
     const usuario = await this.obtenerUsuario(usuarioId);
@@ -121,9 +127,9 @@ export class PublicacionesService {
 
   // ---------- Ayudas internas ----------
 
-  // SPRINT 2: el front manda el _id del usuario en la cabecera "x-usuario-id".
-  // Lo buscamos en la base para confirmar que existe y saber su perfil.
-  // SPRINT 3: esto se reemplaza por el token JWT.
+  // El _id del usuario viene del token (el AuthGuard ya lo validó).
+  // Igual lo buscamos en la base para confirmar que sigue existiendo, que está activo
+  // y para saber su perfil actual (por si un admin se lo cambió).
   private async obtenerUsuario(usuarioId: string) {
     const usuario = usuarioId ? await this.usuariosService.buscarPorId(usuarioId) : null;
     if (!usuario || !usuario.activo) {
@@ -134,7 +140,8 @@ export class PublicacionesService {
   }
 
   // Busca una publicación que exista y no esté borrada. Si no, 404 Not Found.
-  private async buscarActiva(id: string) {
+  // Es pública (sin private) porque también la usa ComentariosService.
+  async buscarActiva(id: string) {
     const publicacion = isValidObjectId(id) ? await this.publicacionModel.findById(id).exec() : null;
     if (!publicacion || !publicacion.activo) {
       throw new NotFoundException('La publicación no existe');
