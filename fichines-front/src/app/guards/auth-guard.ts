@@ -2,12 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Auth } from '../servicios/auth';
 
-// Igual que en el ejemplo "guards" de la cursada.
-// Deja pasar solo si hay alguien logueado; si no, lo manda al login.
-// SPRINT 3:
-// - Si no hay token -> al login.
-// - Si hay token pero todavía no lo validamos con el back en esta visita
-//   (por ejemplo, recargaste la página) -> a la pantalla "Cargando", que lo valida.
+// Sin token: al login. Con token sin validar (por ejemplo, al recargar): a "Cargando".
 export const authGuard: CanActivateFn = () => {
   const auth = inject(Auth);
   const router = inject(Router);

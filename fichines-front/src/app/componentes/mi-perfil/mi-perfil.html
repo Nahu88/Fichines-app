@@ -1,12 +1,12 @@
 <app-navbar />
 
 <main class="perfil">
-  <!-- authGuard ya garantiza que hay sesión; el @if es para que TypeScript sepa que no es null -->
+  <!-- El @if es para que TypeScript sepa que no es null -->
   @if (usuario) {
     <section class="cabecera hud">
       <div class="foto">
         @if (usuario.imagenUrl) {
-          <img [src]="usuario.imagenUrl" [alt]="'Foto de ' + usuario.nombre" />
+          <img appImagenRespaldo [src]="usuario.imagenUrl" [alt]="'Foto de ' + usuario.nombre" />
         } @else {
           <span class="sin-foto">{{ usuario.nombre.charAt(0) }}</span>
         }
@@ -14,14 +14,13 @@
 
       <div class="identidad">
         <p class="etiqueta">CLASE: {{ usuario.perfil === 'administrador' ? 'ADMINISTRADOR' : 'JUGADOR' }}</p>
-        <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
+        <h1>{{ usuario | nombreCompleto }}</h1>
         <p class="arroba">&#64;{{ usuario.usuario }}</p>
 
-        <!-- Nivel y experiencia, calculados con la cantidad de publicaciones (ver mi-perfil.ts) -->
+        <!-- Nivel y XP (ver mi-perfil.ts) -->
         <div class="nivel">
           <span>NV. {{ nivel() }}</span>
           <div class="barra">
-            <!-- [style.width.%] pone el ancho en porcentaje: 40 -> width: 40% -->
             <div class="relleno" [style.width.%]="xp()"></div>
           </div>
           <span>{{ xp() }} / 100 XP</span>
@@ -29,7 +28,6 @@
       </div>
     </section>
 
-    <!-- Estadísticas del personaje -->
     <section class="stats">
       <div class="stat hud">
         <span class="numero">{{ totalPublicaciones() }}</span>
@@ -56,7 +54,7 @@
       </div>
       <div>
         <dt>Fecha de nacimiento</dt>
-        <!-- 'UTC' para que no reste un día por la zona horaria -->
+        <!-- UTC para que no reste un día -->
         <dd>{{ usuario.fechaNacimiento | date: 'dd/MM/yyyy' : 'UTC' }}</dd>
       </div>
       <div>
@@ -78,16 +76,14 @@
             (meGustaTocado)="alTocarMeGusta($event)"
             (eliminarTocado)="alTocarEliminar($event)" />
 
-          <!-- Comentarios de esta publicación: los 3 más recientes.
-               comentarios()[publicacion._id] es la lista de ESTA publicación;
-               "?? []" usa una lista vacía mientras todavía no llegó del back. -->
+          <!-- Los 3 comentarios más recientes ("?? []" mientras no llegan) -->
           <div class="comentarios">
             <p class="etiqueta">COMENTARIOS ({{ publicacion.cantidadComentarios }})</p>
 
             @for (comentario of comentarios()[publicacion._id] ?? []; track comentario._id) {
               <div class="comentario">
                 <p class="quien">
-                  <strong>{{ comentario.autor.nombre }} {{ comentario.autor.apellido }}</strong>
+                  <strong>{{ comentario.autor | nombreCompleto }}</strong>
                   &#64;{{ comentario.autor.usuario }}, {{ comentario.createdAt | date: 'dd/MM/yyyy HH:mm' }}
                   @if (comentario.modificado) {
                     <span class="editado">(editado)</span>
@@ -99,7 +95,7 @@
               <p>Todavía no hay comentarios en esta publicación.</p>
             }
 
-            <!-- Si tiene más de 3, link a la página de la publicación para verlos todos -->
+            <!-- Con más de 3, link para verlos todos -->
             @if (publicacion.cantidadComentarios > porPublicacion) {
               <a class="ver-todos" [routerLink]="['/publicaciones', publicacion._id]">Ver los {{ publicacion.cantidadComentarios }} comentarios ▶</a>
             }

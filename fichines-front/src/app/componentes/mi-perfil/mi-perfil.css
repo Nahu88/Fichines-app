@@ -4,7 +4,6 @@
   padding: 36px 16px 120px;
 }
 
-/* .hud (en styles.css) le da el fondo, el borde y las esquinas doradas */
 .cabecera {
   display: flex;
   align-items: center;
@@ -85,7 +84,7 @@ blockquote {
   color: var(--texto-suave);
 }
 
-/* Caja de comentarios debajo de cada publicación, "colgando" de ella */
+/* Comentarios debajo de cada publicación */
 .comentarios {
   margin: -10px 0 32px 24px;
   padding: 14px 18px;
@@ -103,7 +102,6 @@ blockquote {
   margin-bottom: 6px;
 }
 
-/* Cada comentario, separado del siguiente por una línea fina */
 .comentario {
   padding: 8px 0;
   border-bottom: 1px solid var(--borde);
@@ -143,7 +141,7 @@ blockquote {
   min-width: 220px;
 }
 
-/* ---- nivel y barra de experiencia (la clase .barra está en styles.css) ---- */
+/* ---- nivel y barra de experiencia ---- */
 .nivel {
   display: flex;
   align-items: center;
@@ -163,7 +161,7 @@ blockquote {
   min-width: 80px;
 }
 
-/* ---- estadísticas: tres cajitas con un número grande ---- */
+/* ---- estadísticas ---- */
 .stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

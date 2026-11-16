@@ -23,14 +23,12 @@ export class Registro {
 
   cargando = signal(false);
 
-  // La imagen no va dentro del FormGroup: los input file se manejan aparte.
+  // El input file se maneja fuera del FormGroup.
   imagen: File | null = null;
   nombreImagen = signal('');
-  // Dirección temporal de la foto elegida, para mostrarla en el cuadro antes de subirla.
   vistaPrevia = signal('');
 
-  // La contraseña va en una variable aparte (como controlClave en el repo de la cursada)
-  // para poder pasársela al validador de "repetir contraseña".
+  // Aparte, para pasársela al validador de "repetir contraseña".
   controlPassword = new FormControl('', { validators: [Validators.required, passwordFuerteValidator()] });
 
   formRegistro = new FormGroup({
@@ -48,14 +46,13 @@ export class Registro {
       descripcion: new FormControl('', { validators: [Validators.maxLength(160)] }),
   });
 
-  // Atajo para usar en el HTML: muestra el error solo si el campo ya fue tocado.
+  // Muestra el error solo si el campo ya fue tocado.
   tieneError(campo: string, error: string) {
     const control = this.formRegistro.get(campo);
     return control!.touched && control!.hasError(error);
   }
 
-  // Barra de "personaje listo": qué porcentaje de los campos obligatorios ya está bien completado.
-  // filter se queda con los campos válidos y length los cuenta.
+  // Porcentaje de campos obligatorios completos (barra "Personaje listo").
   progreso() {
     const campos = ['nombre', 'apellido', 'correo', 'usuario', 'password', 'repetirPassword', 'fechaNacimiento'];
     const completos = campos.filter((campo) => this.formRegistro.get(campo)!.valid).length;
@@ -79,9 +76,8 @@ export class Registro {
     }
 
     this.imagen = archivo;
-    this.nombreImagen.set(archivo.name); // para mostrar qué archivo eligió
-    // createObjectURL crea una dirección que apunta al archivo que está en la PC,
-    // así el <img> puede mostrarlo sin tener que subirlo primero.
+    this.nombreImagen.set(archivo.name);
+    // Dirección temporal para mostrar la foto antes de subirla.
     this.vistaPrevia.set(URL.createObjectURL(archivo));
   }
 
@@ -91,8 +87,7 @@ export class Registro {
       return;
     }
 
-    // Armamos un FormData porque mandamos texto + archivo en la misma petición.
-    // No mandamos repetirPassword: solo sirve para validar en el front.
+    // FormData porque va texto y archivo. repetirPassword no se manda.
     const valores = this.formRegistro.value;
     const datos = new FormData();
     datos.append('nombre', valores.nombre!);
@@ -108,7 +103,6 @@ export class Registro {
 
     this.cargando.set(true);
     this.auth.registro(datos).subscribe({
-      // SPRINT 3: igual que el login, llega { usuario, token }.
       next: (respuesta) => {
         this.cargando.set(false);
         this.auth.iniciarSesion(respuesta);

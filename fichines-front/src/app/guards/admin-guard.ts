@@ -3,8 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { Auth } from '../servicios/auth';
 import { Modal } from '../servicios/modal';
 
-// Solo deja pasar a usuarios con perfil "administrador".
-// Un usuario común que escribe /panel a mano vuelve al salón con un aviso.
+// Solo administradores; un usuario común vuelve al salón con un aviso.
 export const adminGuard: CanActivateFn = () => {
   const auth = inject(Auth);
   const router = inject(Router);

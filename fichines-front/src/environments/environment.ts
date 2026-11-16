@@ -1,6 +1,4 @@
-// Dirección del backend en NestJS.
-// En tu PC: http://localhost:3000
-// Antes de deployar el front en Vercel, cambiala por la URL del back en Vercel (sin barra al final).
+// URL del back en Vercel (sin barra al final). En la PC se usa environment.development.ts.
 export const environment = {
   apiUrl: 'https://fichines-app-kzsm.vercel.app',
 };

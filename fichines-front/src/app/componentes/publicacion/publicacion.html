@@ -1,16 +1,17 @@
-<!-- [class] agrega la clase del tipo (logro, party, duda) para cambiar el color del cartel -->
-<article class="publicacion hud" [class]="publicacion().tipo">
+<!-- [class] cambia el color del cartel según el tipo; appBrilloHover es una directiva propia -->
+<article class="publicacion hud" [class]="publicacion().tipo" appBrilloHover>
   <p class="cartel">{{ carteles[publicacion().tipo] }}</p>
 
   <header>
     @if (publicacion().autor.imagenUrl) {
-      <img class="inicial" [src]="publicacion().autor.imagenUrl" alt="" />
+      <img class="inicial" appImagenRespaldo [src]="publicacion().autor.imagenUrl" alt="" />
     } @else {
       <span class="inicial">{{ publicacion().autor.nombre.charAt(0).toUpperCase() }}</span>
     }
     <div>
-      <strong>{{ publicacion().autor.nombre }} {{ publicacion().autor.apellido }}</strong>
-      <span class="meta">&#64;{{ publicacion().autor.usuario }}, {{ publicacion().createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+      <!-- Pipes propios: nombreCompleto y tiempoRelativo -->
+      <strong>{{ publicacion().autor | nombreCompleto }}</strong>
+      <span class="meta" [title]="publicacion().createdAt | date: 'dd/MM/yyyy HH:mm'">&#64;{{ publicacion().autor.usuario }}, {{ publicacion().createdAt | tiempoRelativo }}</span>
     </div>
   </header>
 
@@ -21,7 +22,6 @@
     <img class="imagen" [src]="publicacion().imagenUrl" [alt]="publicacion().titulo" />
   }
 
-  <!-- Juego y consola: solo si los completaron -->
   @if (publicacion().juego || publicacion().plataforma) {
     <div class="chips">
       @if (publicacion().juego) {
@@ -34,14 +34,13 @@
   }
 
   <footer>
-    <!-- "Darle una ficha" es nuestro "me gusta". [class.activa] lo pinta si ya la diste. -->
+    <!-- La "ficha" es el me gusta -->
     <button type="button" class="accion" [class.activa]="leDiMeGusta()" (click)="tocarMeGusta()"
             [title]="leDiMeGusta() ? 'Quitar me gusta' : 'Me gusta'">
       <span class="moneda"></span>
       {{ publicacion().cantidadMeGusta }} {{ publicacion().cantidadMeGusta === 1 ? 'ficha' : 'fichas' }}
     </button>
 
-    <!-- SPRINT 3: link a la página de la publicación, con sus comentarios -->
     @if (conEnlace()) {
       <a class="accion" [routerLink]="['/publicaciones', publicacion()._id]">
         {{ publicacion().cantidadComentarios }} {{ publicacion().cantidadComentarios === 1 ? 'comentario' : 'comentarios' }}
@@ -49,7 +48,8 @@
     }
 
     @if (puedoEliminar()) {
-      <button type="button" class="accion eliminar" (click)="tocarEliminar()">Eliminar</button>
+      <!-- Si es de otro y soy admin, dice "Dar de baja" -->
+      <button type="button" class="accion eliminar" (click)="tocarEliminar()">{{ esMia() ? 'Eliminar' : 'Dar de baja' }}</button>
     }
   </footer>
 </article>

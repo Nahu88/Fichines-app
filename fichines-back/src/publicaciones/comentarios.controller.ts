@@ -4,27 +4,25 @@ import { ComentarioDto } from './dto/comentario.dto.js';
 import { ListarComentariosDto } from './dto/listar-comentarios.dto.js';
 import { AuthGuard } from '../guards/auth.guard.js';
 
-// "Módulo publicaciones - comentarios controller" (como pide el TP): vive dentro del
-// módulo de publicaciones, y sus rutas cuelgan de una publicación:
-//   /publicaciones/:publicacionId/comentarios
+// Rutas de comentarios de una publicación: /publicaciones/:publicacionId/comentarios
 @Controller('publicaciones/:publicacionId/comentarios')
 @UseGuards(AuthGuard)
 export class ComentariosController {
   constructor(private readonly comentariosService: ComentariosService) {}
 
-  // GET /publicaciones/:publicacionId/comentarios?offset=0&limit=5 -> 200
+  // GET ?offset=0&limit=5
   @Get()
   listar(@Param('publicacionId') publicacionId: string, @Query() filtros: ListarComentariosDto) {
     return this.comentariosService.listar(publicacionId, filtros);
   }
 
-  // POST /publicaciones/:publicacionId/comentarios -> 201  body: { "mensaje": "..." }
+  // POST (201) body: { "mensaje": "..." }
   @Post()
   crear(@Param('publicacionId') publicacionId: string, @Req() request: any, @Body() datos: ComentarioDto) {
     return this.comentariosService.crear(publicacionId, request.usuario.sub, datos);
   }
 
-  // PUT /publicaciones/:publicacionId/comentarios/:id -> 200  body: { "mensaje": "..." }
+  // PUT /:id body: { "mensaje": "..." }
   @Put(':id')
   editar(
     @Param('publicacionId') publicacionId: string,

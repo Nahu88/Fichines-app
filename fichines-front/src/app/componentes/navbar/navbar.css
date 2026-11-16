@@ -1,4 +1,4 @@
-/* Barra de arriba, como la barra de estado (HUD) de un juego */
+/* Barra de arriba, como el HUD de un juego */
 .navbar {
   border-bottom: 3px solid var(--oro);
   background: var(--panel);
@@ -52,8 +52,7 @@ nav a:hover,
   color: var(--texto);
 }
 
-/* El link de la página actual queda marcado en dorado y con la flechita
-   de "opción elegida", como en el menú de un juego */
+/* Link de la página actual: dorado y con flechita */
 nav a.activo {
   color: var(--oro);
   border-color: var(--oro);

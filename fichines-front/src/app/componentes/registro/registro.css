@@ -1,12 +1,11 @@
-/* El formulario de registro es largo: en pantallas grandes el emblema
-   queda quieto a la izquierda mientras scrolleás. */
+/* En pantallas grandes el emblema queda quieto mientras scrolleás */
 .escena {
   position: sticky;
   top: 48px;
   align-self: start;
 }
 
-/* Dos campos uno al lado del otro (nombre/apellido, contraseñas) */
+/* Dos campos por fila */
 .fila {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -34,7 +33,7 @@
   background: var(--fondo);
 }
 
-/* La foto elegida llena el cuadro; object-fit: cover la recorta sin deformarla */
+/* La foto llena el cuadro sin deformarse */
 .avatar img {
   width: 100%;
   height: 100%;
@@ -61,7 +60,7 @@
   }
 }
 
-/* Barra de "personaje listo" (la clase .barra está en styles.css) */
+/* Barra "Personaje listo" (.barra está en styles.css) */
 .progreso {
   margin: 4px 0 24px;
 }

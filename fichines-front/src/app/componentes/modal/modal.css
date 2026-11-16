@@ -8,7 +8,6 @@
   background: rgba(14, 13, 28, 0.8);
 }
 
-/* La caja usa el marco .hud de styles.css (esquinas doradas) */
 .caja {
   width: 100%;
   max-width: 420px;
@@ -23,7 +22,7 @@
   color: var(--oro);
 }
 
-/* Cartelito pixelado de arriba: "NIVEL SUPERADO" o "GAME OVER" */
+/* Cartel de arriba: "NIVEL SUPERADO" o "GAME OVER" */
 .icono {
   font-family: var(--fuente-pixel);
   font-size: 10px;
@@ -35,7 +34,7 @@
   color: var(--error) !important;
 }
 
-/* Flechita de "seguir" en la esquina de abajo */
+/* Flechita que titila */
 .siguiente {
   position: absolute;
   right: 18px;
@@ -44,7 +43,7 @@
   font-size: 14px;
 }
 
-/* En los errores, las esquinas y el título pasan a rojo */
+/* Errores en rojo */
 .caja.error h2 {
   color: var(--error);
 }
@@ -64,7 +63,7 @@
   to   { transform: scale(1); opacity: 1; }
 }
 
-/* Los dos botones del modal de confirmación, uno al lado del otro */
+/* Botones del modal de confirmación */
 .botones {
   display: flex;
   justify-content: center;

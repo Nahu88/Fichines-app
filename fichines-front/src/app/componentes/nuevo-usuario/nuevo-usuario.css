@@ -1,0 +1,52 @@
+.nuevo {
+  padding: 22px 24px;
+  margin-bottom: 8px;
+}
+
+.perfil {
+  display: flex;
+  gap: 24px;
+  border: 2px solid var(--borde);
+  padding: 10px 16px;
+  margin: 0 0 18px;
+}
+
+.perfil legend {
+  font-family: var(--fuente-hud);
+  color: var(--texto-suave);
+  padding: 0 6px;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--fuente-hud);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.opcion input {
+  accent-color: var(--oro);
+  width: 18px;
+  height: 18px;
+}
+
+.grilla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+}
+
+.botones {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 560px) {
+  .grilla {
+    grid-template-columns: 1fr;
+  }
+}

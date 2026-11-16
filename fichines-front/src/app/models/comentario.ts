@@ -1,4 +1,3 @@
-// Así es un comentario tal como lo devuelve el back.
 export interface Comentario {
   _id: string;
   publicacion: string;
@@ -14,7 +13,6 @@ export interface Comentario {
   createdAt: string;
 }
 
-// Respuesta del GET de comentarios: una tanda y el total que hay.
 export interface PaginaComentarios {
   comentarios: Comentario[];
   total: number;

@@ -21,14 +21,11 @@ import { AuthGuard } from '../guards/auth.guard.js';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // POST /auth/registro  -> responde 201 Created (es el default de @Post)
-  // FileInterceptor('imagen') toma el archivo que viene en el campo "imagen"
-  // del FormData. Lo deja en memoria (archivo.buffer) y el service lo sube a Cloudinary.
+  // POST /auth/registro (201). La imagen llega en el campo "imagen" del FormData.
   @Post('registro')
   @UseInterceptors(
     FileInterceptor('imagen', {
       fileFilter: (req, archivo, callback) => {
-        // Solo dejamos pasar imágenes (image/jpeg, image/png, etc.)
         if (archivo.mimetype.startsWith('image/')) {
           callback(null, true);
         } else {
@@ -38,33 +35,28 @@ export class AuthController {
     }),
   )
   registrar(@Body() datos: RegistroDto, @UploadedFile() imagen?: ArchivoSubido) {
-    // Máximo 2 MB. Lo chequeamos acá para poder responder el error en castellano.
     if (imagen && imagen.size > 2 * 1024 * 1024) {
       throw new BadRequestException('La imagen puede pesar hasta 2 MB');
     }
     return this.authService.registrar(datos, imagen);
   }
 
-  // POST /auth/login -> el login no "crea" nada, por eso forzamos 200 OK en vez de 201.
+  // POST /auth/login (200: el login no crea nada).
   @Post('login')
   @HttpCode(HttpStatus.OK)
   login(@Body() datos: LoginDto) {
     return this.authService.login(datos);
   }
 
-  // POST /auth/autorizar -> 200 con los datos del usuario si el token es válido.
-  // Si el token falta, está vencido o fue modificado, el AuthGuard responde 401 antes de llegar acá.
-  // La usa la pantalla "Cargando" del front al abrir la app.
+  // POST /auth/autorizar: 200 con el usuario si el token es válido, 401 si no.
   @Post('autorizar')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   autorizar(@Req() request: any) {
-    // request.usuario lo dejó el AuthGuard: es el payload del token.
     return this.authService.autorizar(request.usuario.sub);
   }
 
-  // POST /auth/refrescar -> 200 con un token NUEVO (mismos datos, otros 15 minutos).
-  // También pasa por el AuthGuard: solo se puede refrescar un token que todavía es válido.
+  // POST /auth/refrescar: token nuevo, solo si el actual todavía es válido.
   @Post('refrescar')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)

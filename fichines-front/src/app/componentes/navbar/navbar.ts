@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth } from '../../servicios/auth';
+import { SoloAdminDirective } from '../../directivas/solo-admin.directive';
+import { ImagenRespaldoDirective } from '../../directivas/imagen-respaldo.directive';
 
 @Component({
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, SoloAdminDirective, ImagenRespaldoDirective],
   selector: 'app-navbar',
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',

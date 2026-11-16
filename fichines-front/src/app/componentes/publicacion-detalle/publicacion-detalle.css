@@ -43,7 +43,7 @@ app-publicacion {
   width: 100%;
 }
 
-/* Cada comentario: una caja con borde lila a la izquierda, uno debajo del otro */
+/* Cada comentario, uno debajo del otro */
 .comentario {
   padding: 14px 18px;
   margin-bottom: 12px;

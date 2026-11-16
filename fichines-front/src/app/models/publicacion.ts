@@ -1,4 +1,3 @@
-// Así es una publicación tal como la devuelve el back.
 export interface Publicacion {
   _id: string;
   titulo: string;
@@ -7,7 +6,6 @@ export interface Publicacion {
   tipo: 'logro' | 'party' | 'duda';
   juego: string;
   plataforma: string;
-  // El back hace populate: en vez del _id del autor manda sus datos.
   autor: {
     _id: string;
     nombre: string;
@@ -21,7 +19,6 @@ export interface Publicacion {
   createdAt: string;
 }
 
-// Respuesta del GET /publicaciones: una página de publicaciones y el total que hay.
 export interface PaginaPublicaciones {
   publicaciones: Publicacion[];
   total: number;

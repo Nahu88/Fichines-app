@@ -1,0 +1,90 @@
+<section class="resumen">
+  <div class="tarjeta hud" appBrilloHover>
+    <span class="numero">{{ usuarios().length }}</span>
+    <span>Jugadores</span>
+  </div>
+  <div class="tarjeta hud" appBrilloHover="#8f87d9">
+    <span class="numero">{{ cantidadAdmins() }}</span>
+    <span>Administradores</span>
+  </div>
+  <div class="tarjeta hud" appBrilloHover="#ff8a8a">
+    <span class="numero">{{ cantidadDeshabilitados() }}</span>
+    <span>Deshabilitados</span>
+  </div>
+</section>
+
+<!-- Alta de un usuario nuevo -->
+@if (mostrarFormulario()) {
+  <app-nuevo-usuario (creado)="alCrear($event)" (cancelado)="mostrarFormulario.set(false)" />
+} @else {
+  <button class="boton" type="button" (click)="mostrarFormulario.set(true)">+ NUEVO JUGADOR</button>
+}
+
+<!-- Buscador (lo usa el pipe filtroUsuarios) -->
+<div class="buscador">
+  <label for="busqueda">Buscar</label>
+  <input id="busqueda" type="search" [(ngModel)]="busqueda" placeholder="Nombre, usuario o correo" />
+</div>
+
+@if (cargando()) {
+  <p class="estado parpadeo">CARGANDO…</p>
+} @else {
+  <div class="tabla-contenedor">
+    <table>
+      <thead>
+        <tr>
+          <th>Jugador</th>
+          <th>Correo</th>
+          <th>Perfil</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (usuario of usuarios() | filtroUsuarios: busqueda(); track usuario._id) {
+          <tr [class.deshabilitado]="!usuario.activo">
+            <td>
+              <div class="jugador">
+                @if (usuario.imagenUrl) {
+                  <img class="foto" appImagenRespaldo [src]="usuario.imagenUrl" alt="" />
+                } @else {
+                  <span class="foto">{{ usuario.nombre.charAt(0).toUpperCase() }}</span>
+                }
+                <div>
+                  <strong>{{ usuario | nombreCompleto }}</strong>
+                  <span class="nick">&#64;{{ usuario.usuario }}</span>
+                </div>
+              </div>
+            </td>
+            <td class="correo">{{ usuario.correo }}</td>
+            <td>
+              <span class="chip" [class.admin]="usuario.perfil === 'administrador'">
+                {{ usuario.perfil === 'administrador' ? 'ADMIN' : 'USUARIO' }}
+              </span>
+            </td>
+            <td>
+              <span class="estado-texto" [class.inactivo]="!usuario.activo">
+                {{ usuario.activo ? 'Habilitado' : 'Deshabilitado' }}
+              </span>
+            </td>
+            <td class="acciones">
+              @if (esYo(usuario)) {
+                <span class="vos">(vos)</span>
+              } @else if (usuario.activo) {
+                <button class="boton-secundario peligro" type="button" (click)="deshabilitar(usuario)">Deshabilitar</button>
+              } @else {
+                <button class="boton-secundario" type="button" (click)="habilitar(usuario)">Habilitar</button>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="vacio">
+              {{ busqueda() ? 'Ningún jugador coincide con "' + busqueda() + '".' : 'Todavía no hay jugadores.' }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

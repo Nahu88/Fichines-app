@@ -1,8 +1,6 @@
 import { Service, signal } from '@angular/core';
 
-// Reemplaza a alert() y confirm(): cualquier componente llama a mostrar(...) o confirmar(...)
-// y el componente <app-modal> (que está en app.html) se abre solo,
-// porque lee estos signals.
+// Reemplaza a alert() y confirm(): <app-modal> se abre solo leyendo estos signals.
 @Service()
 export class Modal {
   abierto = signal(false);
@@ -10,10 +8,9 @@ export class Modal {
   mensaje = signal('');
   tipo = signal<'exito' | 'error'>('exito');
 
-  // Si hay una función guardada acá, el modal muestra "Cancelar" y "Sí, seguro"
-  // y al confirmar la ejecuta. Si es null, es un modal común con "OK".
+  // Si hay una acción guardada, es un modal de confirmación; si es null, uno común con "OK".
   alConfirmar = signal<(() => void) | null>(null);
-  textoConfirmar = signal('SI, SEGURO'); // texto del botón de aceptar
+  textoConfirmar = signal('SI, SEGURO');
 
   mostrar(titulo: string, mensaje: string, tipo: 'exito' | 'error' = 'exito') {
     this.titulo.set(titulo);
@@ -23,9 +20,7 @@ export class Modal {
     this.abierto.set(true);
   }
 
-  // Pregunta antes de hacer algo (por ejemplo, eliminar una publicación).
-  // accion es una función: se ejecuta solo si el usuario aprieta el botón de aceptar.
-  // textoBoton es opcional: si no se pasa, dice "SI, SEGURO".
+  // accion se ejecuta solo si el usuario acepta.
   confirmar(titulo: string, mensaje: string, accion: () => void, textoBoton = 'SI, SEGURO') {
     this.titulo.set(titulo);
     this.mensaje.set(mensaje);
@@ -35,9 +30,7 @@ export class Modal {
     this.abierto.set(true);
   }
 
-  // Muestra el error que devolvió el back.
-  // Nest manda { message: '...' } o { message: ['...', '...'] } (validaciones).
-  // Si status es 0, el back no respondió (está apagado o sin internet).
+  // Muestra el mensaje de error del back (status 0 = el back no respondió).
   mostrarErrorHttp(error: any) {
     let mensaje = 'No pudimos conectar con el servidor. Probá de nuevo en un rato.';
     if (error.status !== 0 && error.error?.message) {
@@ -47,7 +40,6 @@ export class Modal {
     this.mostrar('Algo salió mal', mensaje, 'error');
   }
 
-  // Botón "Sí, seguro": ejecuta la acción guardada y cierra.
   aceptar() {
     const accion = this.alConfirmar();
     this.cerrar();

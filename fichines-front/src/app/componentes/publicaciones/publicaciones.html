@@ -5,7 +5,7 @@
   <h1>¿Qué están jugando?</h1>
   <p class="bajada">Hola {{ auth.usuarioActual()?.nombre }}, esto es lo último que publicaron los jugadores.</p>
 
-  <!-- ---------- Formulario para publicar ---------- -->
+  <!-- Formulario para publicar -->
   <form class="nueva hud" [formGroup]="formPublicacion" (ngSubmit)="publicar()" novalidate>
     <p class="etiqueta">NUEVA PUBLICACION</p>
 
@@ -57,7 +57,6 @@
     </div>
 
     <div class="pie-form">
-      <!-- El label hace de botón y el input file queda oculto, como en el registro -->
       <label for="imagen" class="elegir-imagen">
         {{ nombreImagen() ? 'Imagen: ' + nombreImagen() : '+ Agregar imagen (opcional)' }}
       </label>
@@ -69,36 +68,32 @@
     </div>
   </form>
 
-  <!-- ---------- Orden ---------- -->
+  <!-- Orden -->
   <div class="barra-orden">
     <label for="orden">Ordenar por</label>
-    <!-- [value] muestra el orden actual; (change) avisa cuando lo cambian -->
     <select id="orden" [value]="orden()" (change)="cambiarOrden($event)">
       <option value="fecha">Más nuevas</option>
       <option value="meGusta">Más fichas</option>
     </select>
   </div>
 
-  <!-- ---------- Listado ---------- -->
+  <!-- Listado -->
   @if (cargando()) {
     <p class="estado parpadeo">CARGANDO…</p>
   } @else {
     @for (publicacion of lista(); track publicacion._id) {
-      <!-- input: [publicacion] / outputs: (meGustaTocado) y (eliminarTocado).
-           $event es la publicación que mandó el componente con emit(). -->
       <app-publicacion
         [publicacion]="publicacion"
         (meGustaTocado)="alTocarMeGusta($event)"
         (eliminarTocado)="alTocarEliminar($event)" />
     } @empty {
-      <!-- @empty se muestra cuando la lista está vacía -->
       <div class="vacio hud">
         <p class="etiqueta">SALON VACIO</p>
         <p>Todavía no hay publicaciones. ¡Sé el primero en contar algo!</p>
       </div>
     }
 
-    <!-- ---------- Paginado ---------- -->
+    <!-- Paginado -->
     @if (total() > porPagina) {
       <nav class="paginado" aria-label="Páginas">
         <button class="boton-secundario" type="button" (click)="anterior()" [disabled]="pagina() === 1">◀ Anterior</button>

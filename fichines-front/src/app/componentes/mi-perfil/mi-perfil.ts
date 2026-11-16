@@ -8,12 +8,13 @@ import { ComentariosService } from '../../servicios/comentarios';
 import { Publicacion } from '../../models/publicacion';
 import { Comentario } from '../../models/comentario';
 import { Navbar } from '../navbar/navbar';
+import { NombreCompletoPipe } from '../../pipes/nombre-completo-pipe';
+import { ImagenRespaldoDirective } from '../../directivas/imagen-respaldo.directive';
 import { PublicacionComponent } from '../publicacion/publicacion';
 
-// Muestra los datos del usuario logueado y sus últimas 3 publicaciones con sus comentarios.
-// Reusa el mismo componente <app-publicacion> que el Salón.
+// Datos del usuario logueado y sus últimas 3 publicaciones con sus comentarios.
 @Component({
-  imports: [Navbar, DatePipe, PublicacionComponent, RouterLink],
+  imports: [Navbar, DatePipe, PublicacionComponent, RouterLink, NombreCompletoPipe, ImagenRespaldoDirective],
   selector: 'app-mi-perfil',
   templateUrl: './mi-perfil.html',
   styleUrl: './mi-perfil.css',
@@ -24,31 +25,26 @@ export class MiPerfil implements OnInit {
   servicio = inject(PublicacionesService);
   comentariosService = inject(ComentariosService);
 
-  // El usuario logueado (authGuard asegura que haya uno para entrar acá).
   usuario = this.auth.usuarioActual();
 
   ultimas = signal<Publicacion[]>([]);
   totalPublicaciones = signal(0);
   cargando = signal(true);
 
-  // Comentarios de cada publicación, guardados por el _id de la publicación.
-  // Ejemplo: { "6ae9...": [comentario1, comentario2], "6af1...": [] }
-  // Record<string, Comentario[]> es un objeto cuyas claves son textos y sus valores, listas.
+  // Comentarios de cada publicación, con su _id como clave.
   comentarios = signal<Record<string, Comentario[]>>({});
-  porPublicacion = 3; // cuántos comentarios mostramos de cada una
+  porPublicacion = 3;
 
   ngOnInit() {
     this.cargar();
   }
 
-  // Pide al back las 3 más nuevas de ESTE usuario (filtro usuario=_id, limit=3).
   cargar() {
     this.servicio.listar('fecha', 0, 3, this.usuario!._id).subscribe({
       next: (respuesta) => {
         this.cargando.set(false);
         this.ultimas.set(respuesta.publicaciones);
         this.totalPublicaciones.set(respuesta.total);
-        // Por cada publicación pedimos sus comentarios más recientes.
         respuesta.publicaciones.forEach((publicacion) => this.cargarComentarios(publicacion));
       },
       error: (error) => {
@@ -58,8 +54,6 @@ export class MiPerfil implements OnInit {
     });
   }
 
-  // Trae los últimos comentarios de UNA publicación y los guarda con su _id como clave.
-  // { ...lista, [id]: valor } copia lo que ya había y agrega (o reemplaza) esa clave.
   cargarComentarios(publicacion: Publicacion) {
     this.comentariosService.listar(publicacion._id, 0, this.porPublicacion).subscribe({
       next: (respuesta) => {
@@ -69,25 +63,20 @@ export class MiPerfil implements OnInit {
     });
   }
 
-  // ---------- Nivel del personaje ----------
-  // Cada publicación da 20 XP y cada 100 XP subís de nivel (o sea, 5 publicaciones por nivel).
+  // Nivel: 5 publicaciones por nivel (20 XP cada una).
   nivel() {
     return Math.floor(this.totalPublicaciones() / 5) + 1;
   }
 
-  // XP dentro del nivel actual: el resto de dividir por 5 (%), por 20.
   xp() {
     return (this.totalPublicaciones() % 5) * 20;
   }
 
-  // Fichas (me gusta) sumadas de las últimas 3 publicaciones.
-  // reduce recorre la lista acumulando un total que arranca en 0.
   fichasRecientes() {
     return this.ultimas().reduce((suma, p) => suma + p.cantidadMeGusta, 0);
   }
 
-  // ---------- Eventos de <app-publicacion> ----------
-  // Igual que en el Salón, pero acá después de cada cambio volvemos a cargar.
+  // Eventos de <app-publicacion>: después de cada cambio se vuelve a cargar.
   alTocarMeGusta(publicacion: Publicacion) {
     const yaDi = publicacion.meGusta.includes(this.usuario!._id);
     const pedido = yaDi ? this.servicio.quitarMeGusta(publicacion._id) : this.servicio.darMeGusta(publicacion._id);

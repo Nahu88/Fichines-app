@@ -1,12 +1,10 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-// Mismo estilo que los validadores de la clase de formularios.
-
 // Contraseña: al menos 8 caracteres, una mayúscula y un número.
 export function passwordFuerteValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const valor: string = control.value || '';
-    if (valor === '') return null; // de los vacíos se encarga Validators.required
+    if (valor === '') return null;
 
     const tieneMayuscula = /[A-Z]/.test(valor);
     const tieneNumero = /[0-9]/.test(valor);
@@ -19,8 +17,7 @@ export function passwordFuerteValidator(): ValidatorFn {
   };
 }
 
-// Igual que en la clase de formularios: recibe el control con el que tiene que coincidir
-// (la contraseña) y se pone en el campo "repetir contraseña".
+// Va en "repetir contraseña" y recibe el control de la contraseña.
 export function clavesCoincidenValidator(controlACoincidir: AbstractControl): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     if (control.value !== controlACoincidir.value) {

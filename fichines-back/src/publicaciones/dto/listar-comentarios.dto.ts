@@ -1,8 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional, Max, Min } from 'class-validator';
 
-// Paginado de comentarios: GET /publicaciones/:id/comentarios?offset=0&limit=5
-// Igual que en ListarPublicacionesDto.
+// Paginado de comentarios: ?offset=0&limit=5
 export class ListarComentariosDto {
   @IsOptional()
   @Type(() => Number)

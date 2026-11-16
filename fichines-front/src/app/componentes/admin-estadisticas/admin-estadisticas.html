@@ -1,0 +1,59 @@
+<form class="filtro hud" [formGroup]="formFechas" (ngSubmit)="consultar()" novalidate>
+  <div class="campo">
+    <label for="desde">Desde</label>
+    <input id="desde" type="date" formControlName="desde" [max]="hoy" />
+  </div>
+  <div class="campo">
+    <label for="hasta">Hasta</label>
+    <input id="hasta" type="date" formControlName="hasta" [max]="hoy" />
+  </div>
+  <button class="boton" type="submit" [disabled]="cargando()">{{ cargando() ? 'CARGANDO…' : '▶ VER' }}</button>
+
+  <!-- "Hoy" usa la misma fecha en desde y hasta -->
+  <div class="rapidos">
+    <span>Rápido:</span>
+    <button type="button" (click)="rapido(0)">Hoy</button>
+    <button type="button" (click)="rapido(7)">7 días</button>
+    <button type="button" (click)="rapido(30)">30 días</button>
+  </div>
+
+  @if (formFechas.hasError('rangoInvertido')) {
+    <p class="mensaje-error">La fecha "desde" no puede ser posterior a "hasta".</p>
+  }
+  @if (formFechas.controls.desde.touched && formFechas.controls.desde.hasError('required')) {
+    <p class="mensaje-error">Elegí la fecha desde.</p>
+  }
+  @if (formFechas.controls.hasta.touched && formFechas.controls.hasta.hasError('required')) {
+    <p class="mensaje-error">Elegí la fecha hasta.</p>
+  }
+</form>
+
+<!-- Los <canvas> no van dentro de un @if: Chart.js necesita que existan -->
+<section class="graficos">
+  <article class="grafico hud ancho">
+    <p class="etiqueta">PUBLICACIONES POR USUARIO</p>
+    <p class="total">{{ totales().publicaciones }} publicaciones en el lapso</p>
+    <div class="lienzo">
+      <canvas #lienzoUsuarios></canvas>
+      @if (vacio('usuarios') && !cargando()) { <p class="sin-datos">SIN DATOS</p> }
+    </div>
+  </article>
+
+  <article class="grafico hud">
+    <p class="etiqueta">COMENTARIOS POR DIA</p>
+    <p class="total">{{ totales().comentarios }} comentarios en el lapso</p>
+    <div class="lienzo">
+      <canvas #lienzoDias></canvas>
+      @if (vacio('dias') && !cargando()) { <p class="sin-datos">SIN DATOS</p> }
+    </div>
+  </article>
+
+  <article class="grafico hud">
+    <p class="etiqueta">COMENTARIOS POR PUBLICACION</p>
+    <p class="total">De qué publicaciones se habló más</p>
+    <div class="lienzo">
+      <canvas #lienzoPublicaciones></canvas>
+      @if (vacio('publicaciones') && !cargando()) { <p class="sin-datos">SIN DATOS</p> }
+    </div>
+  </article>
+</section>

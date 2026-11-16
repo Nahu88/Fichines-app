@@ -1,0 +1,93 @@
+<form class="nuevo hud" [formGroup]="formUsuario" (ngSubmit)="crear()" novalidate>
+  <p class="etiqueta">NUEVO JUGADOR</p>
+
+  <!-- Los dos radio buttons del perfil (lo pide el TP) -->
+  <fieldset class="perfil">
+    <legend>Perfil</legend>
+    <label class="opcion">
+      <input type="radio" formControlName="perfil" value="usuario" />
+      Usuario
+    </label>
+    <label class="opcion">
+      <input type="radio" formControlName="perfil" value="administrador" />
+      Administrador
+    </label>
+  </fieldset>
+
+  <div class="grilla">
+    <div class="campo">
+      <label for="nu-nombre">Nombre</label>
+      <input id="nu-nombre" formControlName="nombre" />
+      @if (tieneError('nombre', 'required')) { <p class="mensaje-error">Obligatorio.</p> }
+    </div>
+    <div class="campo">
+      <label for="nu-apellido">Apellido</label>
+      <input id="nu-apellido" formControlName="apellido" />
+      @if (tieneError('apellido', 'required')) { <p class="mensaje-error">Obligatorio.</p> }
+    </div>
+    <div class="campo">
+      <label for="nu-correo">Correo</label>
+      <input id="nu-correo" type="email" formControlName="correo" />
+      @if (tieneError('correo', 'required')) {
+        <p class="mensaje-error">Obligatorio.</p>
+      } @else if (tieneError('correo', 'email')) {
+        <p class="mensaje-error">El correo no es válido.</p>
+      }
+    </div>
+    <div class="campo">
+      <label for="nu-usuario">Nombre de usuario</label>
+      <input id="nu-usuario" formControlName="usuario" />
+      @if (tieneError('usuario', 'required')) {
+        <p class="mensaje-error">Obligatorio.</p>
+      } @else if (tieneError('usuario', 'minlength') || tieneError('usuario', 'maxlength')) {
+        <p class="mensaje-error">Entre 3 y 20 caracteres.</p>
+      } @else if (tieneError('usuario', 'pattern')) {
+        <p class="mensaje-error">Solo letras, números, punto y guion bajo.</p>
+      }
+    </div>
+    <div class="campo">
+      <label for="nu-password">Contraseña</label>
+      <input id="nu-password" type="password" formControlName="password" autocomplete="new-password" />
+      @if (tieneError('password', 'required')) {
+        <p class="mensaje-error">Obligatoria.</p>
+      } @else if (tieneError('password', 'passwordDebil')) {
+        <p class="mensaje-error">Mínimo 8 caracteres, una mayúscula y un número.</p>
+      }
+    </div>
+    <div class="campo">
+      <label for="nu-repetir">Repetir contraseña</label>
+      <input id="nu-repetir" type="password" formControlName="repetirPassword" autocomplete="new-password" />
+      @if (tieneError('repetirPassword', 'required')) {
+        <p class="mensaje-error">Obligatorio.</p>
+      } @else if (tieneError('repetirPassword', 'clavesNoCoinciden')) {
+        <p class="mensaje-error">Las contraseñas no coinciden.</p>
+      }
+    </div>
+    <div class="campo">
+      <label for="nu-fecha">Fecha de nacimiento</label>
+      <input id="nu-fecha" type="date" formControlName="fechaNacimiento" />
+      @if (tieneError('fechaNacimiento', 'required')) {
+        <p class="mensaje-error">Obligatoria.</p>
+      } @else if (tieneError('fechaNacimiento', 'menorDeEdad')) {
+        <p class="mensaje-error">Tiene que tener al menos 13 años.</p>
+      }
+    </div>
+    <div class="campo">
+      <label for="nu-imagen">Foto (opcional)</label>
+      <input id="nu-imagen" type="file" accept="image/*" (change)="elegirImagen($event)" />
+    </div>
+  </div>
+
+  <div class="campo">
+    <label for="nu-descripcion">Descripción (opcional)</label>
+    <textarea id="nu-descripcion" rows="2" formControlName="descripcion"></textarea>
+    @if (tieneError('descripcion', 'maxlength')) { <p class="mensaje-error">Hasta 160 caracteres.</p> }
+  </div>
+
+  <div class="botones">
+    <button class="boton-secundario" type="button" (click)="cancelado.emit()">Cancelar</button>
+    <button class="boton" type="submit" [disabled]="enviando()">
+      {{ enviando() ? 'CREANDO…' : '▶ CREAR JUGADOR' }}
+    </button>
+  </div>
+</form>

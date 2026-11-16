@@ -4,7 +4,6 @@
   <a class="volver" routerLink="/publicaciones">◀ Volver al salón</a>
 
   @if (publicacion(); as publicacion) {
-    <!-- La misma tarjeta del Salón, sin el link a sí misma -->
     <app-publicacion
       [publicacion]="publicacion"
       [conEnlace]="false"
@@ -17,7 +16,7 @@
   <section class="comentarios">
     <p class="etiqueta">COMENTARIOS ({{ totalComentarios() }})</p>
 
-    <!-- ---------- Escribir un comentario ---------- -->
+    <!-- Escribir un comentario -->
     <form class="nuevo hud" [formGroup]="formComentario" (ngSubmit)="comentar()" novalidate>
       <div class="campo">
         <label for="mensaje">Tu comentario</label>
@@ -34,19 +33,18 @@
       </button>
     </form>
 
-    <!-- ---------- Lista: uno debajo del otro, los más recientes primero ---------- -->
+    <!-- Comentarios, los más recientes primero -->
     @for (comentario of comentarios(); track comentario._id) {
       <article class="comentario">
         <header>
           @if (comentario.autor.imagenUrl) {
-            <img class="mini" [src]="comentario.autor.imagenUrl" alt="" />
+            <img class="mini" appImagenRespaldo [src]="comentario.autor.imagenUrl" alt="" />
           } @else {
             <span class="mini">{{ comentario.autor.nombre.charAt(0).toUpperCase() }}</span>
           }
-          <strong>{{ comentario.autor.nombre }} {{ comentario.autor.apellido }}</strong>
+          <strong>{{ comentario.autor | nombreCompleto }}</strong>
           <span class="meta">
-            &#64;{{ comentario.autor.usuario }}, {{ comentario.createdAt | date: 'dd/MM/yyyy HH:mm' }}
-            <!-- El TP pide anunciar que un comentario fue editado -->
+            &#64;{{ comentario.autor.usuario }}, {{ comentario.createdAt | tiempoRelativo }}
             @if (comentario.modificado) {
               <span class="editado">(editado)</span>
             }
@@ -54,7 +52,7 @@
         </header>
 
         @if (editandoId() === comentario._id) {
-          <!-- Modo edición: textarea con el texto actual y botones guardar / cancelar -->
+          <!-- Modo edición -->
           <div class="campo">
             <textarea rows="2" [formControl]="textoEdicion" aria-label="Editar comentario"></textarea>
             @if (textoEdicion.touched && textoEdicion.hasError('required')) {
@@ -78,7 +76,6 @@
       }
     }
 
-    <!-- "Cargar más": solo si quedan comentarios por traer -->
     @if (hayMas()) {
       <button class="boton-secundario cargar-mas" type="button" (click)="cargarMas()" [disabled]="cargandoComentarios()">
         {{ cargandoComentarios() ? 'Cargando…' : 'Cargar más comentarios ▼' }}

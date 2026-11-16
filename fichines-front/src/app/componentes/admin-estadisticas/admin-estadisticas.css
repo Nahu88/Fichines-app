@@ -1,0 +1,88 @@
+.filtro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0 16px;
+  padding: 20px 22px 6px;
+  margin-bottom: 24px;
+}
+
+.filtro .boton {
+  margin-bottom: 18px;
+}
+
+.rapidos {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 18px auto;
+  font-family: var(--fuente-hud);
+  color: var(--texto-suave);
+}
+
+.rapidos button {
+  font-family: var(--fuente-hud);
+  font-size: 14px;
+  color: var(--texto);
+  background: var(--fondo);
+  border: 2px solid var(--borde);
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.rapidos button:hover {
+  border-color: var(--oro);
+  color: var(--oro);
+}
+
+.filtro .mensaje-error {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+input[type='date'] {
+  color-scheme: dark; /* el calendario del navegador en modo oscuro */
+}
+
+.graficos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.grafico {
+  padding: 20px 22px;
+}
+
+.grafico.ancho {
+  grid-column: 1 / -1; /* ocupa las dos columnas */
+}
+
+.total {
+  color: var(--texto-suave);
+  font-size: 14px;
+  margin: -6px 0 14px;
+}
+
+.lienzo {
+  position: relative;
+  height: 260px;
+}
+
+.sin-datos {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  font-family: var(--fuente-pixel);
+  font-size: 11px;
+  color: var(--texto-suave);
+  background: var(--panel);
+}
+
+@media (max-width: 760px) {
+  .graficos {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
-// Emblema de Fichines: una ficha de arcade.
-// Aparece en login y registro; es un componente aparte para no repetir el SVG.
+// La ficha de arcade de login, registro y cargando.
 @Component({
   selector: 'app-emblema',
   templateUrl: './emblema.html',

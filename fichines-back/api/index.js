@@ -1,6 +1,4 @@
-// Punto de entrada que Vercel busca en la carpeta "api".
-// Solo reexporta la función de dist/serverless.js
-// (dist se genera con "npm run build" antes del deploy).
+// Entrada de Vercel: reexporta la función compilada de serverless.ts.
 import handler from '../dist/serverless.js';
  
 export default handler;

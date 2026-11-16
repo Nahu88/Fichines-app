@@ -9,8 +9,7 @@
   text-align: center;
 }
 
-/* La ficha gira sin parar: animation repite "girar" cada 1.2 segundos (infinite).
-   steps(8) hace que gire "a saltos", como un sprite de juego viejo. */
+/* La ficha gira a saltos (steps), como un sprite viejo */
 .spinner {
   width: 120px;
   animation: girar 1.2s steps(8) infinite;

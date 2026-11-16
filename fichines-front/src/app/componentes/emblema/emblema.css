@@ -16,7 +16,7 @@
   stroke-width: 2;
   stroke-dasharray: 10 8;
   transform-origin: 100px 100px;
-  /* el aro de afuera gira despacio: la única animación de la pantalla */
+  /* el aro de afuera gira despacio */
   animation: girar 40s linear infinite;
 }
 

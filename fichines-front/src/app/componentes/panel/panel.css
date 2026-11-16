@@ -1,5 +1,5 @@
 .panel-admin {
-  max-width: 820px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 36px 16px 120px;
 }
@@ -11,37 +11,33 @@ h1 {
 
 .bajada {
   color: var(--texto-suave);
-  margin: 0 0 32px;
+  margin: 0 0 24px;
 }
 
-.secciones {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+/* Pestañas como las de un menú de juego */
+.pestanias {
+  display: flex;
+  gap: 8px;
+  border-bottom: 3px solid var(--borde);
+  margin-bottom: 28px;
 }
 
-/* .hud (en styles.css) le da el fondo, el borde y las esquinas doradas */
-.seccion {
-  padding: 24px;
-}
-
-.seccion h2 {
-  font-size: 22px;
-}
-
-.seccion p {
+.pestanias a {
+  font-family: var(--fuente-hud);
+  font-weight: 600;
+  font-size: 16px;
   color: var(--texto-suave);
-  margin: 0 0 16px;
+  text-decoration: none;
+  padding: 10px 18px;
+  margin-bottom: -3px;
+  border-bottom: 3px solid transparent;
 }
 
-.icono {
-  font-size: 30px;
-  line-height: 1;
-  color: var(--oro) !important;
+.pestanias a:hover {
+  color: var(--texto);
 }
 
-.pronto {
-  font-family: var(--fuente-pixel);
-  font-size: 9px;
-  color: var(--lila);
+.pestanias a.activa {
+  color: var(--oro);
+  border-bottom-color: var(--oro);
 }

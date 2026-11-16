@@ -7,9 +7,8 @@ import { PublicacionesModule } from './publicaciones/publicaciones.module.js';
  
 @Module({
   imports: [
-    // Lee el archivo .env y carga sus variables en process.env
+    // Carga el .env en process.env.
     ConfigModule.forRoot(),
-    // Conexión a MongoDB 
     MongooseModule.forRoot(process.env.CONNECTION_STRING!),
     AuthModule,
     UsuariosModule,

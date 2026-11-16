@@ -17,7 +17,6 @@ export class Login {
   modal = inject(Modal);
   router = inject(Router);
 
-  // true mientras esperamos la respuesta del back (para deshabilitar el botón)
   cargando = signal(false);
 
   formLogin = new FormGroup({
@@ -26,7 +25,6 @@ export class Login {
   });
 
   ingresar() {
-    // Si el formulario tiene errores, los mostramos todos y no enviamos nada.
     if (this.formLogin.invalid) {
       this.formLogin.markAllAsTouched();
       return;
@@ -36,8 +34,7 @@ export class Login {
     const { identificador, password } = this.formLogin.value;
 
     this.auth.login(identificador!, password!).subscribe({
-      // SPRINT 3: el back devuelve { usuario, token }. iniciarSesion guarda los dos
-      // en el localStorage y arranca el contador del aviso de los 5 minutos.
+      // Llega { usuario, token }.
       next: (respuesta) => {
         this.cargando.set(false);
         this.auth.iniciarSesion(respuesta);

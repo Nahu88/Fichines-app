@@ -9,7 +9,7 @@
     <p class="etiqueta">NUEVA PARTIDA</p>
     <h2>Crear cuenta</h2>
 
-    <!-- Barra que se llena a medida que completás bien los campos obligatorios -->
+    <!-- Barra "Personaje listo" -->
     <div class="progreso">
       <div class="progreso-texto">
         <span>Personaje listo</span>
@@ -21,7 +21,7 @@
     </div>
 
     <form [formGroup]="formRegistro" (ngSubmit)="registrarse()" novalidate>
-      <!-- Foto de perfil: el label hace de botón y el input file queda oculto -->
+      <!-- El label hace de botón; el input file queda oculto -->
       <div class="foto">
         <label for="imagen" class="avatar">
           @if (vistaPrevia()) {
@@ -85,7 +85,6 @@
         <div class="campo">
           <label for="password">Contraseña</label>
           <input id="password" type="password" formControlName="password" autocomplete="new-password" aria-describedby="regla-password" />
-          <!-- La regla se muestra desde el principio: el usuario no es adivino -->
           @if (tieneError('password', 'required')) {
             <p class="mensaje-error">Elegí una contraseña.</p>
           } @else if (tieneError('password', 'passwordDebil')) {

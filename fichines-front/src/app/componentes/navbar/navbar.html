@@ -5,23 +5,19 @@
       FICHINES
     </a>
 
-    <!-- El navbar solo aparece en pantallas protegidas por authGuard,
-         así que acá siempre hay alguien logueado -->
     <nav>
       <a routerLink="/publicaciones" routerLinkActive="activo">Salón</a>
       <a routerLink="/mi-perfil" routerLinkActive="activo">Mi perfil</a>
-      <!-- El link al mostrador (panel de admin) solo se muestra a administradores (y adminGuard protege la ruta igual) -->
-      @if (auth.usuarioActual()?.perfil === 'administrador') {
-        <a routerLink="/panel" routerLinkActive="activo">Mostrador</a>
-      }
+      <!-- *appSoloAdmin: directiva estructural propia -->
+      <a *appSoloAdmin routerLink="/panel" routerLinkActive="activo">Mostrador</a>
       <button type="button" class="salir" (click)="salir()">Salir</button>
     </nav>
 
-    <!-- Datos del jugador, como el HUD de arriba de un juego: foto, nick y vidas -->
+    <!-- Foto, nick y vidas del jugador -->
     @if (auth.usuarioActual(); as usuario) {
       <div class="jugador">
         @if (usuario.imagenUrl) {
-          <img class="mini-foto" [src]="usuario.imagenUrl" alt="" />
+          <img class="mini-foto" appImagenRespaldo [src]="usuario.imagenUrl" alt="" />
         } @else {
           <span class="mini-foto">{{ usuario.nombre.charAt(0) }}</span>
         }

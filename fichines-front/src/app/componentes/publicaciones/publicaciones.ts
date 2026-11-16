@@ -7,8 +7,7 @@ import { Publicacion } from '../../models/publicacion';
 import { Navbar } from '../navbar/navbar';
 import { PublicacionComponent } from '../publicacion/publicacion';
 
-// Pantalla "Salón": formulario para publicar + listado ordenado y paginado.
-// Cada publicación se dibuja con el componente <app-publicacion>.
+// Salón: formulario para publicar y listado ordenado y paginado.
 @Component({
   imports: [Navbar, PublicacionComponent, ReactiveFormsModule],
   selector: 'app-publicaciones',
@@ -20,15 +19,13 @@ export class Publicaciones implements OnInit {
   modal = inject(Modal);
   servicio = inject(PublicacionesService);
 
-  // ---------- Listado ----------
   lista = signal<Publicacion[]>([]);
-  total = signal(0);         // cuántas publicaciones hay en total (lo manda el back)
-  orden = signal('fecha');   // 'fecha' o 'meGusta'
+  total = signal(0);
+  orden = signal('fecha');
   pagina = signal(1);
   porPagina = 5;
   cargando = signal(false);
 
-  // ---------- Formulario para publicar ----------
   publicando = signal(false);
   imagen: File | null = null;
   nombreImagen = signal('');
@@ -43,19 +40,16 @@ export class Publicaciones implements OnInit {
     plataforma: new FormControl(''),
   });
 
-  // ngOnInit se ejecuta una vez, cuando la pantalla aparece: traemos la primera página.
   ngOnInit() {
     this.cargar();
   }
 
-  // Cantidad de páginas. Math.ceil redondea para arriba (11 publicaciones / 5 = 3 páginas).
   totalPaginas() {
     return Math.max(1, Math.ceil(this.total() / this.porPagina));
   }
 
   cargar() {
     this.cargando.set(true);
-    // offset:Página 1 -> 0, página 2 -> 5, página 3 -> 10.
     const offset = (this.pagina() - 1) * this.porPagina;
 
     this.servicio.listar(this.orden(), offset, this.porPagina).subscribe({
@@ -71,7 +65,6 @@ export class Publicaciones implements OnInit {
     });
   }
 
-  // El select de orden cambió: volvemos a la página 1 con el orden nuevo.
   cambiarOrden(evento: Event) {
     const select = evento.target as HTMLSelectElement;
     this.orden.set(select.value);
@@ -89,14 +82,11 @@ export class Publicaciones implements OnInit {
     this.cargar();
   }
 
-  // ---------- Publicar ----------
-
   tieneError(campo: string, error: string) {
     const control = this.formPublicacion.get(campo);
     return control!.touched && control!.hasError(error);
   }
 
-  // Igual que la foto de perfil del registro.
   elegirImagen(evento: Event) {
     const input = evento.target as HTMLInputElement;
     const archivo = input.files?.[0];
@@ -123,7 +113,6 @@ export class Publicaciones implements OnInit {
       return;
     }
 
-    // FormData 
     const valores = this.formPublicacion.value;
     const datos = new FormData();
     datos.append('titulo', valores.titulo!);
@@ -139,11 +128,10 @@ export class Publicaciones implements OnInit {
     this.servicio.crear(datos).subscribe({
       next: () => {
         this.publicando.set(false);
-        // Limpiamos el formulario (reset lo deja vacío; al tipo le volvemos a poner "logro").
         this.formPublicacion.reset({ tipo: 'logro', juego: '', plataforma: '' });
         this.imagen = null;
         this.nombreImagen.set('');
-        // Volvemos a la página 1 ordenada por fecha para que se vea la nueva arriba de todo.
+        // Vuelve a la primera página por fecha para que se vea la nueva arriba.
         this.orden.set('fecha');
         this.pagina.set(1);
         this.cargar();
@@ -156,19 +144,15 @@ export class Publicaciones implements OnInit {
     });
   }
 
-  // ---------- Eventos que llegan desde <app-publicacion> (output) ----------
-
+  // Eventos que llegan desde <app-publicacion>.
   alTocarMeGusta(publicacion: Publicacion) {
     const miId = this.auth.usuarioActual()!._id;
     const yaDi = publicacion.meGusta.includes(miId);
 
-    // Si ya la di, la quito; si no, la doy. Las dos devuelven la publicación actualizada.
     const pedido = yaDi ? this.servicio.quitarMeGusta(publicacion._id) : this.servicio.darMeGusta(publicacion._id);
 
     pedido.subscribe({
       next: (actualizada) => {
-        // Reemplazamos en la lista solo la publicación que cambió.
-        // map recorre la lista y devuelve una nueva con ese elemento cambiado.
         this.lista.update((lista) => lista.map((p) => (p._id === actualizada._id ? actualizada : p)));
       },
       error: (error) => this.modal.mostrarErrorHttp(error),
@@ -176,8 +160,6 @@ export class Publicaciones implements OnInit {
   }
 
   alTocarEliminar(publicacion: Publicacion) {
-    // No usamos confirm(): preguntamos con nuestro modal.
-    // Le pasamos una función flecha que se ejecuta solo si el usuario confirma.
     this.modal.confirmar(
       'Eliminar publicación',
       `¿Seguro que querés eliminar "${publicacion.titulo}"?`,
@@ -188,7 +170,7 @@ export class Publicaciones implements OnInit {
   eliminar(publicacion: Publicacion) {
     this.servicio.eliminar(publicacion._id).subscribe({
       next: () => {
-        // Si era la única de la última página, volvemos una página para no quedar en una vacía.
+        // Si era la única de la última página, vuelve a la anterior.
         if (this.lista().length === 1 && this.pagina() > 1) {
           this.pagina.update((p) => p - 1);
         }

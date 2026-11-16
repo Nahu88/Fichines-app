@@ -1,4 +1,3 @@
-/* .hud (en styles.css) le da el marco con esquinas doradas */
 .publicacion {
   padding: 22px 24px;
   margin-bottom: 22px;
@@ -68,7 +67,7 @@ h2 {
 .mensaje {
   margin: 0 0 18px;
   max-width: 62ch;
-  white-space: pre-line; /* respeta los saltos de línea que escribió el usuario */
+  white-space: pre-line; /* respeta los saltos de línea */
   overflow-wrap: anywhere;
 }
 
@@ -149,7 +148,7 @@ footer {
   border-color: var(--error);
 }
 
-/* La ficha (moneda) del botón: un círculo dorado con borde */
+/* La ficha (moneda) del botón */
 .moneda {
   display: inline-block;
   width: 12px;

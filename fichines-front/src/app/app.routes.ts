@@ -3,14 +3,9 @@ import { authGuard } from './guards/auth-guard';
 import { invitadoGuard } from './guards/invitado-guard';
 import { adminGuard } from './guards/admin-guard';
 
-// Igual que en el repo de la cursada: cada pantalla se carga con loadComponent
-// (carga diferida: el código de la pantalla se descarga recién cuando entrás).
-// Los guards deciden quién puede entrar a cada pantalla:
-//   invitadoGuard -> solo sin sesión (login, registro)
-//   authGuard     -> solo con sesión (salón, publicación, mi perfil)
-//   adminGuard    -> solo administradores (panel)
+// invitadoGuard: solo sin sesión. authGuard: solo con sesión. adminGuard: solo administradores.
 export const routes: Routes = [
-  // SPRINT 3: la app arranca en la pantalla "Cargando", que valida el token con el back.
+  // La app arranca en "Cargando", que valida el token.
   { path: '', redirectTo: 'cargando', pathMatch: 'full' },
   {
     path: 'cargando',
@@ -32,7 +27,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    // SPRINT 3: una publicación en grande con sus comentarios. ":id" es el _id de la publicación.
     path: 'publicaciones/:id',
     loadComponent: () =>
       import('./componentes/publicacion-detalle/publicacion-detalle').then((m) => m.PublicacionDetalle),
@@ -46,9 +40,20 @@ export const routes: Routes = [
   {
     path: 'panel',
     loadComponent: () => import('./componentes/panel/panel').then((m) => m.Panel),
-    // Primero chequea que haya sesión, después que sea administrador
+    // Pestañas del Mostrador (se dibujan en el <router-outlet> de panel.html).
+    children: [
+      { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
+      {
+        path: 'usuarios',
+        loadComponent: () => import('./componentes/admin-usuarios/admin-usuarios').then((m) => m.AdminUsuarios),
+      },
+      {
+        path: 'estadisticas',
+        loadComponent: () =>
+          import('./componentes/admin-estadisticas/admin-estadisticas').then((m) => m.AdminEstadisticas),
+      },
+    ],
     canActivate: [authGuard, adminGuard],
   },
-  // Cualquier otra dirección vuelve al inicio (Cargando decide a dónde ir)
   { path: '**', redirectTo: 'cargando' },
 ];

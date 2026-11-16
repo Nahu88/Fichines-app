@@ -1,4 +1,3 @@
-// Así es un usuario tal como lo devuelve el back (sin la contraseña).
 export interface Usuario {
   _id: string;
   nombre: string;
@@ -13,7 +12,7 @@ export interface Usuario {
   createdAt: string;
 }
 
-// SPRINT 3: login y registro devuelven el usuario y su token JWT.
+// Respuesta del login y el registro.
 export interface RespuestaAuth {
   usuario: Usuario;
   token: string;

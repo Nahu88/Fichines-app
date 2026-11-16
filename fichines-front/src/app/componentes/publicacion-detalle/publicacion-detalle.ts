@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Auth } from '../../servicios/auth';
@@ -9,12 +8,14 @@ import { ComentariosService } from '../../servicios/comentarios';
 import { Publicacion } from '../../models/publicacion';
 import { Comentario } from '../../models/comentario';
 import { Navbar } from '../navbar/navbar';
+import { NombreCompletoPipe } from '../../pipes/nombre-completo-pipe';
+import { TiempoRelativoPipe } from '../../pipes/tiempo-relativo-pipe';
+import { ImagenRespaldoDirective } from '../../directivas/imagen-respaldo.directive';
 import { PublicacionComponent } from '../publicacion/publicacion';
 
-// SPRINT 3: página de UNA publicación, en grande, con sus comentarios.
-// La dirección es /publicaciones/:id -> el :id lo leemos con ActivatedRoute.
+// Página de una publicación (/publicaciones/:id) con sus comentarios.
 @Component({
-  imports: [Navbar, PublicacionComponent, ReactiveFormsModule, DatePipe, RouterLink],
+  imports: [Navbar, PublicacionComponent, ReactiveFormsModule, RouterLink, NombreCompletoPipe, TiempoRelativoPipe, ImagenRespaldoDirective],
   selector: 'app-publicacion-detalle',
   templateUrl: './publicacion-detalle.html',
   styleUrl: './publicacion-detalle.css',
@@ -26,17 +27,16 @@ export class PublicacionDetalle implements OnInit {
   publicacionesService = inject(PublicacionesService);
   comentariosService = inject(ComentariosService);
 
-  // snapshot.paramMap.get('id') lee el ":id" de la dirección actual.
   id = inject(ActivatedRoute).snapshot.paramMap.get('id')!;
 
   publicacion = signal<Publicacion | null>(null);
   comentarios = signal<Comentario[]>([]);
   totalComentarios = signal(0);
-  porTanda = 5; // cuántos comentarios trae cada vez
+  porTanda = 5;
   cargandoComentarios = signal(false);
   enviando = signal(false);
 
-  // Edición: el _id del comentario que se está editando (null = ninguno).
+  // _id del comentario que se está editando (null = ninguno).
   editandoId = signal<string | null>(null);
   textoEdicion = new FormControl('', { validators: [Validators.required, Validators.maxLength(500)] });
 
@@ -55,16 +55,12 @@ export class PublicacionDetalle implements OnInit {
     this.cargarMas();
   }
 
-  // ---------- Comentarios ----------
-
-  // "Cargar más": pide la tanda siguiente y la AGREGA al final, sin borrar las anteriores.
-  // offset = cuántos ya tenemos (la primera vez 0, después 5, 10...).
+  // Trae la siguiente tanda y la agrega al final, sin borrar las anteriores.
   cargarMas() {
     this.cargandoComentarios.set(true);
     this.comentariosService.listar(this.id, this.comentarios().length, this.porTanda).subscribe({
       next: (respuesta) => {
         this.cargandoComentarios.set(false);
-        // [...a, ...b] arma una lista nueva con los de antes y los nuevos.
         this.comentarios.update((anteriores) => [...anteriores, ...respuesta.comentarios]);
         this.totalComentarios.set(respuesta.total);
       },
@@ -75,7 +71,6 @@ export class PublicacionDetalle implements OnInit {
     });
   }
 
-  // ¿Quedan comentarios por traer?
   hayMas() {
     return this.comentarios().length < this.totalComentarios();
   }
@@ -90,7 +85,7 @@ export class PublicacionDetalle implements OnInit {
       next: (nuevo) => {
         this.enviando.set(false);
         this.formComentario.reset();
-        // El nuevo es el más reciente: va primero en la lista.
+        // El nuevo va primero (es el más reciente).
         this.comentarios.update((lista) => [nuevo, ...lista]);
         this.totalComentarios.update((total) => total + 1);
         this.publicacion.update((p) => (p ? { ...p, cantidadComentarios: p.cantidadComentarios + 1 } : p));
@@ -122,7 +117,6 @@ export class PublicacionDetalle implements OnInit {
     }
     this.comentariosService.editar(this.id, comentario._id, this.textoEdicion.value!).subscribe({
       next: (editado) => {
-        // Reemplazamos solo ese comentario en la lista (llega con modificado: true).
         this.comentarios.update((lista) => lista.map((c) => (c._id === editado._id ? editado : c)));
         this.editandoId.set(null);
       },
@@ -130,8 +124,7 @@ export class PublicacionDetalle implements OnInit {
     });
   }
 
-  // ---------- Eventos de <app-publicacion> (igual que en el Salón) ----------
-
+  // Eventos de <app-publicacion>.
   alTocarMeGusta(publicacion: Publicacion) {
     const yaDi = publicacion.meGusta.includes(this.auth.usuarioActual()!._id);
     const pedido = yaDi

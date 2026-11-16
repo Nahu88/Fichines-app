@@ -19,16 +19,13 @@ import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto.js';
 import type { ArchivoSubido } from '../imagenes/imagenes.service.js';
 import { AuthGuard } from '../guards/auth.guard.js';
 
-// SPRINT 3: @UseGuards arriba de la clase protege TODAS las rutas del controller.
-// Sin un token válido, el AuthGuard responde 401 antes de llegar a cualquier método.
-// Quién hace el pedido sale del token: request.usuario.sub es su _id.
+// Todas las rutas piden token. request.usuario.sub es el _id de quien hace el pedido.
 @Controller('publicaciones')
 @UseGuards(AuthGuard)
 export class PublicacionesController {
   constructor(private readonly publicacionesService: PublicacionesService) {}
 
-  // POST /publicaciones -> 201 Created
-  // Igual que el registro: FormData con texto + imagen opcional en el campo "imagen".
+  // POST /publicaciones (201): FormData con texto e imagen opcional.
   @Post()
   @UseInterceptors(
     FileInterceptor('imagen', {
@@ -48,32 +45,31 @@ export class PublicacionesController {
     return this.publicacionesService.crear(request.usuario.sub, datos, imagen);
   }
 
-  // GET /publicaciones?orden=fecha&offset=0&limit=5&usuario=<id> -> 200 OK
-  // @Query() junta todos los parámetros de la URL en el DTO y los valida.
+  // GET /publicaciones?orden=fecha&offset=0&limit=5&usuario=<id>
   @Get()
   listar(@Query() filtros: ListarPublicacionesDto) {
     return this.publicacionesService.listar(filtros);
   }
 
-  // GET /publicaciones/:id -> 200 OK (una sola, para la página de la publicación)
+  // GET /publicaciones/:id
   @Get(':id')
   buscarUna(@Param('id') id: string) {
     return this.publicacionesService.buscarUna(id);
   }
 
-  // DELETE /publicaciones/:id -> 200 OK (baja lógica)
+  // DELETE /publicaciones/:id (baja lógica)
   @Delete(':id')
   eliminar(@Param('id') id: string, @Req() request: any) {
     return this.publicacionesService.eliminar(id, request.usuario.sub);
   }
 
-  // POST /publicaciones/:id/me-gusta -> 201 Created (se crea un me gusta)
+  // POST /publicaciones/:id/me-gusta (201)
   @Post(':id/me-gusta')
   darMeGusta(@Param('id') id: string, @Req() request: any) {
     return this.publicacionesService.darMeGusta(id, request.usuario.sub);
   }
 
-  // DELETE /publicaciones/:id/me-gusta -> 200 OK
+  // DELETE /publicaciones/:id/me-gusta
   @Delete(':id/me-gusta')
   quitarMeGusta(@Param('id') id: string, @Req() request: any) {
     return this.publicacionesService.quitarMeGusta(id, request.usuario.sub);

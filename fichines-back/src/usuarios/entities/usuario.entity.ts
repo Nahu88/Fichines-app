@@ -1,7 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-// @Schema le dice a Mongoose que esta clase es una colección de Mongo.
-// timestamps: true agrega solos los campos createdAt y updatedAt.
 @Schema({ timestamps: true })
 export class Usuario {
   @Prop({ required: true })
@@ -10,14 +8,13 @@ export class Usuario {
   @Prop({ required: true })
   apellido: string;
 
-  // unique: true crea un índice en Mongo para que no se repita.
   @Prop({ required: true, unique: true, lowercase: true })
   correo: string;
 
   @Prop({ required: true, unique: true })
   usuario: string;
 
-  // Acá se guarda la contraseña YA encriptada (hash), nunca la original.
+  // Siempre encriptada (hash de bcrypt).
   @Prop({ required: true })
   password: string;
 
@@ -27,15 +24,14 @@ export class Usuario {
   @Prop({ default: '' })
   descripcion: string;
 
-  // URL de la imagen de perfil (la imagen en sí queda en la carpeta /uploads).
+  // URL de Cloudinary.
   @Prop({ default: '' })
   imagenUrl: string;
 
-  // enum: solo acepta estos dos valores. Por defecto todos son "usuario".
   @Prop({ enum: ['usuario', 'administrador'], default: 'usuario' })
   perfil: string;
 
-  // Para la baja lógica del sprint 4 (habilitar / deshabilitar usuarios).
+  // Baja lógica.
   @Prop({ default: true })
   activo: boolean;
 }

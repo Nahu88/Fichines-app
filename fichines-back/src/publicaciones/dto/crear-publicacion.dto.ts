@@ -1,9 +1,6 @@
 import { IsIn, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
-// Datos que llegan para crear una publicación (por FormData, porque puede traer imagen).
-// El autor NO viene acá: lo sacamos de la cabecera del usuario (ver el controller).
-// OJO con el orden: class-validator revisa los decoradores de ABAJO hacia ARRIBA, y con
-// stopAtFirstError se queda con el primer error. Por eso "es obligatorio" va al final.
+// Llega por FormData. El autor sale del token.
 export class CrearPublicacionDto {
   @MaxLength(80, { message: 'El título puede tener hasta 80 caracteres' })
   @IsString({ message: 'El título tiene que ser texto' })

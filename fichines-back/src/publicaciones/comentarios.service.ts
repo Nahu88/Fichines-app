@@ -12,27 +12,28 @@ const DATOS_AUTOR = 'nombre apellido usuario imagenUrl';
 export class ComentariosService {
   constructor(
     @InjectModel(Comentario.name) private readonly comentarioModel: Model<Comentario>,
-    // Para chequear que la publicación exista (y sumarle 1 a cantidadComentarios).
     private readonly publicacionesService: PublicacionesService,
   ) {}
 
-  // GET: los comentarios de una publicación, los más recientes primero, paginados.
+  // Los más recientes primero, paginados.
   async listar(publicacionId: string, filtros: ListarComentariosDto) {
-    await this.publicacionesService.buscarActiva(publicacionId); // 404 si no existe
+    await this.publicacionesService.buscarActiva(publicacionId);
+
+    // $ne: false también incluye los comentarios viejos que no tienen el campo activo.
+    const condicion = { publicacion: publicacionId, activo: { $ne: false } };
 
     const comentarios = await this.comentarioModel
-      .find({ publicacion: publicacionId })
-      .sort({ createdAt: -1 })   // -1: los más nuevos arriba (lo pide el TP)
+      .find(condicion)
+      .sort({ createdAt: -1 })
       .skip(filtros.offset!)
       .limit(filtros.limit!)
       .populate('autor', DATOS_AUTOR)
       .exec();
 
-    const total = await this.comentarioModel.countDocuments({ publicacion: publicacionId });
+    const total = await this.comentarioModel.countDocuments(condicion);
     return { comentarios, total };
   }
 
-  // POST: agrega un comentario con su autor (sale del token) y la fecha (la pone timestamps).
   async crear(publicacionId: string, usuarioId: string, datos: ComentarioDto) {
     const publicacion = await this.publicacionesService.buscarActiva(publicacionId);
 
@@ -42,14 +43,13 @@ export class ComentariosService {
       mensaje: datos.mensaje,
     });
 
-    // Le sumamos 1 al contador de la publicación.
     publicacion.cantidadComentarios = publicacion.cantidadComentarios + 1;
     await publicacion.save();
 
     return nuevo.populate('autor', DATOS_AUTOR);
   }
 
-  // PUT: cambia el mensaje y marca modificado: true. Solo lo puede hacer quien lo escribió.
+  // Solo lo puede editar quien lo escribió; queda marcado como modificado.
   async editar(publicacionId: string, comentarioId: string, usuarioId: string, datos: ComentarioDto) {
     const comentario = isValidObjectId(comentarioId)
       ? await this.comentarioModel.findOne({ _id: comentarioId, publicacion: publicacionId }).exec()
@@ -58,7 +58,6 @@ export class ComentariosService {
       throw new NotFoundException('El comentario no existe');
     }
 
-    // equals compara el _id del autor con el _id que vino en el token.
     if (!comentario.autor.equals(usuarioId)) {
       throw new ForbiddenException('Solo podés editar tus propios comentarios');
     }
